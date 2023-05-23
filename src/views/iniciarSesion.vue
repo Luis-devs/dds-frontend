@@ -5,7 +5,7 @@
           <v-app-bar
           app         
           dark
-          style="background-color:rgba(4, 49, 133, 0.308);border-radius:250px">
+          style="background-color:rgba(4, 49, 133, 0.308);border-radius:249px">
             <vs-navbar shadow square center-collapsed v-model="active" style="background-color:#fff">
               <template #left>
                 <img src="../assets/logos/TAlogin.png" style="max-height:50px;max-width: 250px;">
