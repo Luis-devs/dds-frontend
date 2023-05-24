@@ -1,24 +1,34 @@
-# login
+# Proyecto del sistema de gestión de eventos
 
-## Project setup
-```
+## Descripción
+
+Aquí esta almacenado todo el diseño y funcionalidades de las interfaces del sistema de gestión de evento del curso de _Diseño y Desarrollo de Sistemas_.
+
+# Para tener en cuenta
+
+## Instalar todas las dependencias del proyecto
+```bash
 npm install
 ```
+## Si por alguna razón el comando anterior da error
 
-### Compiles and hot-reloads for development
+```bash
+npm install --force
 ```
+### Ver proyecto en modo desarrollo
+```bash
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
+### Compilar proyecto en modo producción
+```bash
 npm run build
 ```
 
-### Lints and fixes files
-```
+### Dar formato de estilos al archivo
+```bash
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Personalizar configuración
+Ver [Configuration Reference](https://cli.vuejs.org/config/).
