@@ -11,7 +11,7 @@
                 <img src="../assets/logos/TAlogin.png" style="max-height:50px;max-width: 250px;">
               </template>
                 <vs-navbar-item :active="active == 'docs'" id="docs">
-                  Haz Una Donación
+                  Modificado
                 </vs-navbar-item>
                 <vs-navbar-item :active="active == 'components'" id="components">
                   Informacion
