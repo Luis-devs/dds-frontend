@@ -24,6 +24,18 @@ const routes = [{
                 component: () =>
                     import ('../views/welcome.vue'),
             },
+            {
+                name: 'regional',
+                path: '/dashboard/regional',
+                component: () =>
+                    import ('../views/RegionaView.vue'),
+            },
+            {
+                name: 'sede',
+                path: '/dashboard/sede',
+                component: () =>
+                    import ('../views/SedeView.vue'),
+            },
           
         ],
     },
