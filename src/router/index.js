@@ -36,6 +36,12 @@ const routes = [{
                 component: () =>
                     import ('../views/SedeView.vue'),
             },
+            {
+                name: 'centro',
+                path: '/dashboard/centro',
+                component: () =>
+                    import ('../views/CentroView.vue'),
+            },
           
         ],
     },
