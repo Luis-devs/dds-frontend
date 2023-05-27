@@ -36,6 +36,24 @@ const routes = [{
                 component: () =>
                     import ('../views/SedeView.vue'),
             },
+            {
+                name: 'centro',
+                path: '/dashboard/centro',
+                component: () =>
+                    import ('../views/CentroView.vue'),
+            },
+            {
+                name:'ambiente',
+                path: '/dashboard/ambiente',
+                component: () =>
+                    import ('../views/AmbienteView.vue')
+            },
+            {
+                name:'bloque',
+                path: '/dashboard/bloque',
+                component: () =>
+                    import ('../views/BloqueView.vue')
+            }
           
         ],
     },

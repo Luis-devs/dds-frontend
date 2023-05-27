@@ -75,7 +75,7 @@ import vuescroll from "vuescroll";
     menu: [ {
                         header: true,
                         title: 'MENU EVENTOS',
-                        hiddenOnCollapse: true
+                        hiddenOnCollapse: false
                     },
                     {
                         href: '/dashboard/regional',
@@ -83,21 +83,32 @@ import vuescroll from "vuescroll";
                         icon: 'mdi mdi-bank'
                     },
                     {
+                        href: '/dashboard/centro',
+                        title: 'Centro',
+                        icon: 'fa fa-chart-area',
+                    }, 
+                    {
                         href: '/dashboard/sede',
                         title: 'Sede',
                         icon: 'mdi mdi-home-variant'
                     },
                     {
-                        href: '/charts',
-                        title: 'Charts',
-                        icon: 'fa fa-chart-area',
+                        href: '/dashboard/ambiente',
+                        title: 'Ambiente',
+                        icon: 'mdi mdi-home-variant',
+
                         child: [
                             {
-                                href: '/charts/sublink',
-                                title: 'Sub Link'
+                                href: '/dashboard/bloque',
+                                title: 'Bloque'
+                            },
+                            {
+                                href: '/dashboard/tipoAmbiente',
+                                title: 'Tipo Ambiente'
                             }
-                        ]
-                    }], 
+                        ],
+
+                    }],
     
     
     }),
