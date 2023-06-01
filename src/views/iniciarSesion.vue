@@ -6,9 +6,9 @@
           app         
           dark
           style="background-color:rgba(4, 49, 133, 0.308);border-radius:250px">
-            <vs-navbar shadow square center-collapsed v-model="active" style="background-color:#fff">
+            <vs-navbar shadow square center-collapsed v-model="active" style="background-color:rgba(156, 216, 175, 256)">
               <template #left>
-                <img src="../assets/logos/TAlogin.png" style="max-height:50px;max-width: 250px;">
+                <img src="../assets/logos/Diseño2.gif" style="max-height:50px;max-width: 250px;">
               </template>
                 <vs-navbar-item :active="active == 'docs'" id="docs">
                   Haz Una Donación
@@ -20,8 +20,8 @@
                   Contactar
                 </vs-navbar-item>
                 <template #right>
-                  <vs-button style="background-color:#05AFF2;color:white; font-size:16px;font-weight: bold;"  @click="dialog=true">Iniciar Sesión</vs-button>
-                 <a href=""> <b-icon  icon="question"  style="background-color: #C696E6; border-radius:20px;color:white;margin-left:30px" font-scale="3" ></b-icon></a>
+                  <vs-button style="background-color:#28794f;color:white; font-size:16px;font-weight: bold;"  @click="dialog=true">Iniciar Sesión</vs-button>
+                 <a href=""> <b-icon  icon="question"  style="background-color: #28794f; border-radius:20px;color:white;margin-left:30px" font-scale="3" ></b-icon></a>
                 </template>
               
             </vs-navbar>
@@ -127,194 +127,8 @@
           </v-row>
         </div>
        
-       
-       <div class="fondo2">
-      <v-container>
-        <v-row>
-          <v-col cols="12">
-            <v-timeline :dense="$vuetify.breakpoint.smAndDown">
-              <v-timeline-item
-                color="purple lighten-2"
-                fill-dot
-                right
-              >
-                <v-card>
-                  <v-card-title class="purple lighten-2">
-                    <v-icon
-                      dark
-                      size="42"
-                      class="mr-4"
-                    >
-                      mdi-magnify
-                    </v-icon>
-                    <h2 class="text-h4 white--text font-weight-light" style=" font-weight: bold;">
-                      ¿Que es EDUCODE?
-                    </h2>
-                  </v-card-title>
-                  <v-container>
-                    <v-row>
-                      <v-col
-                        cols="12"
-                        md="10"
-                        class="letras2"
-                      >
-                      Educode es un software gratuito, sin fines de lucro. Tiene como objetivo principal enseñar conceptos basicos de programacion mediante el uso de Pseudocodigos, para generar en los estudiantes un aprendizaje significativo.
-                      </v-col>
-                      <v-col
-                        class="hidden-sm-and-down text-right"
-                        md="2"
-                      >
-                        <v-icon size="64">
-                          mdi-calendar-text
-                        </v-icon>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card>
-              </v-timeline-item>
-          
-              <v-timeline-item
-                color="amber lighten-1"
-                fill-dot
-                left
-                small
-              >
-                <v-card>
-                  <v-card-title class="amber lighten-1 justify-end">
-                    <h2 class="text-h4 mr-4 white--text font-weight-light">
-                      Historia de EDUCODE
-                    </h2>
-                    <v-icon
-                      dark
-                      size="42"
-                    >
-                      mdi-home-outline
-                    </v-icon>
-                  </v-card-title>
-                  <v-container>
-                    <v-row>
-                      <v-col
-                        cols="12"
-                        md="10"
-                        class="letras2"
-                      >
-                        Educode nace como alternativa para ayudar a solucionar dificultades evidenciadas en estudiantes al momento de resolver problemas mediante el uso de algoritmos.
-                      </v-col>
-                      
-                    </v-row>
-                  </v-container>
-                </v-card>
-              </v-timeline-item>
-          
-              <v-timeline-item
-                color="cyan lighten-1"
-                fill-dot
-                right
-              >
-                <v-card>
-                  <v-card-title class="cyan lighten-1">
-                    <v-icon
-                      class="mr-4"
-                      dark
-                      size="42"
-                    >
-                      mdi-book-check
-                    </v-icon>
-                    <h2 class="text-h4 white--text font-weight-light">
-                      Objetivos de EDUCODE
-                    </h2>
-                  </v-card-title>
-                  <v-container>
-                    <v-row>
-                      <v-col
-                        cols="12"
-                        md="10"
-                        class="letras2"
-                      >
-                        Este software educativo espera posicionarse en el mercado digital, como una alternativa que puedan adaptar las instituciones educativas al momento de enseñar temas relacionados a los algortmos.
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card>
-              </v-timeline-item>
-          
-              <v-timeline-item
-                color="red lighten-1"
-                fill-dot
-                left
-                small
-              >
-                <v-card>
-                  <v-card-title class="red lighten-1 justify-end">
-                    <h2 class="text-h4 mr-4 white--text font-weight-light">
-                      ¿Como funciona EDUCODE?
-                    </h2>
-                    <v-icon
-                      dark
-                      size="42"
-                    >
-                      mdi-account-multiple-outline
-                    </v-icon>
-                  </v-card-title>
-                  <v-container>
-                    <v-row>
-                      <v-col
-                        class="hidden-sm-and-down"
-                        md="2"
-                      >
-                        <v-icon size="64">
-                          mdi-server-network
-                        </v-icon>
-                      </v-col>
-                      <v-col
-                        cols="12"
-                        md="10"
-                        class="letras2"
-                      >
-                       Educode es una plataforma que plantea diferentes desafios para que los estudiantes superen, estos estan basados en conceptos basicos de programación.
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card>
-              </v-timeline-item>
-          
-              <v-timeline-item
-                color="green lighten-1"
-                fill-dot
-                right
-              >
-                <v-card>
-                  <v-card-title class="green lighten-1">
-                    <v-icon
-                      class="mr-4"
-                      dark
-                      size="42"
-                    >
-                      mdi-code-tags-check
-                    </v-icon>
-                    <h2 class="text-h4 white--text font-weight-light">
-                      ¡MOTIVATE! Recurda esto.
-                    </h2>
-                  </v-card-title>
-                  <v-container>
-                    <v-row>
-                      <v-col class="letras2">
-                        <li>
-                            "No tienes que ser grande para comenzar, pero tienes que comenzar para ser grande” Zig Ziglar.
-                        </li>
-                        <li>
-                          "Si crees que algo es imposible, tú lo harás posible” Bruce Lee.
-                        </li>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card>
-              </v-timeline-item>
-            </v-timeline>
-          </v-col>
-        </v-row>
-      </v-container>
-      </div> 
+       <!--aqui se elimino una ventana modal-->
+
     </div>
   </template>
   <script>

@@ -1,10 +1,9 @@
 <template>
     <v-navigation-drawer v-model="drawer" app class="fon" width="320px">
-        <vuescroll :ops="ops"> 
+        <vuescroll :ops="ops">
 
-    <v-img contain height="120px" src="../../assets/logos/LogotipoTA.png">
-    </v-img>
-  <div style=" text-align: center;"> <label class="letra" for="">EVENTOS</label>
+            <LogoSVG height="100px" width="100px"/>
+  <div style=" text-align: center;"> <label class="letra" for="">EVENTOS SENA</label>
   </div> <v-divider>
     </v-divider>
 
@@ -20,12 +19,15 @@
 <script>
 import {SidebarMenu} from 'vue-sidebar-menu'
 import vuescroll from "vuescroll";
+import LogoSVG from '@/assets/logos/DisenoAnimado.svg';
+
 
 
   export default {
     components: {
             SidebarMenu,
-            vuescroll
+            vuescroll,
+            LogoSVG
         },
 
     props:['drawer'],
@@ -120,7 +122,7 @@ import vuescroll from "vuescroll";
 <style scoped>
     .fon{
     /* background-image:url("../../assets/images/sidebar/abstract4.jpg");*/
-    background-image:url("../../assets/fondosidebar.png");
+    background-image:url("../../assets/imagen5.jpg");
     background-size: 100% 100%;
     background-attachment: fixed;
     width: 100%;
@@ -129,7 +131,7 @@ import vuescroll from "vuescroll";
 
     }
     .letra{
-      color: #FFFFFF;
+      color: #ffffff;
       font-size: 20px;
       font-family: "Mystery Quest";
       font-weight: 400;

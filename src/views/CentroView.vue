@@ -43,7 +43,7 @@
                              item-text="departamento"
                              item-value="departamento"
                              label="Selecciones departamento"
-                             v-model="departamento"
+                             v-model="paquete.departamento"
                               prepend-icon="map"
                        ></v-select>
                        </v-col>
@@ -115,11 +115,12 @@ export default {
   data() {
     return {
      
-      departamento:null,
+      
       paquete: {
         codigo: null,
         nombre: null,
         regional: null,
+        departamento:null,
         municipio: null
         
       },

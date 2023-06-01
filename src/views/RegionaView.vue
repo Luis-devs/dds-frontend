@@ -31,7 +31,7 @@
                     <v-container>
                     <v-row>
                     <v-col
-                     cols="7">
+                    cols="7">
                   
                       <v-row>
                         <v-col
