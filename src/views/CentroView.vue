@@ -144,7 +144,8 @@ export default {
     },
   },
   async mounted() {
-    const response = await axios.get("http://10.187.145.190:3000/regional");
+      const api=`${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
+    const response = await axios.get(`${api}/regional/`);
     this.regionales = response.data;
   },
 
