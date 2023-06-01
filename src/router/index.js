@@ -53,6 +53,12 @@ const routes = [{
                 path: '/dashboard/bloque',
                 component: () =>
                     import ('../views/BloqueView.vue')
+            },
+            {
+                name:'crearprograma',
+                path: '/dashboard/crearprograma',
+                component: () =>
+                    import ('../views/programa/CrearPrograma.vue')
             }
           
         ],

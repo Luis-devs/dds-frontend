@@ -110,7 +110,25 @@ import LogoSVG from '@/assets/logos/DisenoAnimado.svg';
                             }
                         ],
 
-                    }],
+                    },
+                    {
+                      
+                        title: 'Programa',
+                        icon: 'mdi mdi-home-variant',
+
+                        child: [
+                            {
+                                href: '/dashboard/crearprograma',
+                                title: 'Crear'
+                            },
+                            {
+                                href: '/dashboard/listarprograma',
+                                title: 'Listar'
+                            }
+                        ],
+
+                    },
+                ],
     
     
     }),
