@@ -128,6 +128,27 @@ import LogoSVG from '@/assets/logos/DisenoAnimado.svg';
                         ],
 
                     },
+                    {
+                      
+                      title: 'Competencia',
+                      icon: 'mdi mdi-home-variant',
+
+                      child: [
+                          {
+                              href: '/dashboard/crearcompetencia',
+                              title: 'Crear'
+                          },
+                          {
+                              href: '/dashboard/listarcompetencia',
+                              title: 'Listar'
+                          },
+                          {
+                              href: '/dashboard/crearresultadoaprendizaje',
+                              title: 'Resultados de Aprendizaje'
+                          }
+                      ],
+
+                  },
                 ],
     
     

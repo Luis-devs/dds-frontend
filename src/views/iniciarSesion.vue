@@ -164,7 +164,7 @@
   <style scoped>
   
   .fondo{
-  background-image:url("../assets/fondologin2.png");
+  background-image: url(https://th.bing.com/th/id/OIP.UlihEWPJHzmSIZqmXkNJqgHaHa?pid=ImgDet&rs=1);
   background-size: 100% 100%;
   background-attachment: fixed;
   width: 100%;
