@@ -17,8 +17,7 @@ const routes = [{
         name: 'Dashboard',
         component: () =>
             import ('../views/dashboard'),
-        children: [
-            {
+        children: [{
                 name: 'DashboardWelcome',
                 path: '/dashboard/welcome',
                 component: () =>
@@ -43,40 +42,40 @@ const routes = [{
                     import ('../views/CentroView.vue'),
             },
             {
-                name:'ambiente',
+                name: 'ambiente',
                 path: '/dashboard/ambiente',
                 component: () =>
                     import ('../views/AmbienteView.vue')
             },
             {
-                name:'bloque',
+                name: 'bloque',
                 path: '/dashboard/bloque',
                 component: () =>
                     import ('../views/BloqueView.vue')
             },
             {
-                name:'crearprograma',
+                name: 'crearprograma',
                 path: '/dashboard/crearprograma',
                 component: () =>
-                    import ('../views/Programa/CrearPrograma.vue')
+                    import ('../views/programa/CrearPrograma.vue')
             },
             {
-                name:'crearcompetencia',
+                name: 'crearcompetencia',
                 path: '/dashboard/crearcompetencia',
                 component: () =>
                     import ('../views/Competencia/CrearCompetencia.vue')
             },
             {
-                name:'crearresultadoaprendizaje',
+                name: 'crearresultadoaprendizaje',
                 path: '/dashboard/crearresultadoaprendizaje',
                 component: () =>
                     import ('../views/ResultadosAprendizaje/CrearResultadosAprendizaje.vue')
             }
-          
+
         ],
     },
-    
-    
+
+
 ]
 
 const router = new VueRouter({
