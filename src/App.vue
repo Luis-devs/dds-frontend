@@ -2,7 +2,7 @@
       <v-app id="inspire">
         <div class="app-container">
                
-         <router-view/> 
+        <router-view/> 
     
         </div>
       </v-app>
@@ -32,10 +32,10 @@
 }
 
 .v-sidebar-menu .vsm-title{
-    color: #FFFFFF;
+    color: #ffffff;
 }
 .v-sidebar-menu .vsm-icon{
-    color: #FFFFFF;
+    color: #ffffff;
 }
 
 .v-sidebar-menu .vsm-link:hover{

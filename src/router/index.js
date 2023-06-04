@@ -53,6 +53,24 @@ const routes = [{
                 path: '/dashboard/bloque',
                 component: () =>
                     import ('../views/BloqueView.vue')
+            },
+            {
+                name:'crearprograma',
+                path: '/dashboard/crearprograma',
+                component: () =>
+                    import ('../views/Programa/CrearPrograma.vue')
+            },
+            {
+                name:'crearcompetencia',
+                path: '/dashboard/crearcompetencia',
+                component: () =>
+                    import ('../views/Competencia/CrearCompetencia.vue')
+            },
+            {
+                name:'crearresultadoaprendizaje',
+                path: '/dashboard/crearresultadoaprendizaje',
+                component: () =>
+                    import ('../views/ResultadosAprendizaje/CrearResultadosAprendizaje.vue')
             }
           
         ],

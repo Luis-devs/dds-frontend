@@ -8,7 +8,8 @@
     <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
-          src="../../assets/Tulbar.png"
+          src="../../assets/imagen8.jpg"
+
         ></v-img>
       </template>
       <v-app-bar-nav-icon class="btn" dark @click="procesa()"></v-app-bar-nav-icon>

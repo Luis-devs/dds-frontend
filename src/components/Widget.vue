@@ -54,7 +54,7 @@ export default {
 <style>
   .widget-card {
     border-radius: 5%;
-    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.21);
+    box-shadow: 1px 1px 1px 1px rgba(255, 255, 255, 0.21);
     background-color: transparent;
   }
 </style>
