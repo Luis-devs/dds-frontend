@@ -13,9 +13,6 @@
                         <vs-navbar-item :active="active == 'docs'" id="docs">
                             Haz Una Donación
                         </vs-navbar-item>
-                        <vs-navbar-item :active="active == 'docs'" id="docs">
-                            Var ENV {{ entorno }}
-                        </vs-navbar-item>
                         <vs-navbar-item :active="active == 'components'" id="components">
                             Informacion
                         </vs-navbar-item>
@@ -304,7 +301,7 @@
 export default {
     name: 'App',
     data: () => ({
-        entorno: process.env.VUE_APP_API_URL,
+        entorno: process.env,
         active: 'home',
         dialog: false,
         usuario: "",
