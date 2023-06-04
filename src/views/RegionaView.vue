@@ -132,7 +132,8 @@ props:{
 
   methods: {
    async guardar(){
-      await axios.post('http://10.187.145.190:3000/regional/crear',this.paquete)
+       let url=`${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
+      await axios.post(`${url}/regional/crear`,this.paquete)
          .then(function (response) {
            console.log(response);
        })
