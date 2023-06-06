@@ -1,134 +1,113 @@
 <template>
-    <div class="fondoGeneral">
-      <div class="fondo" >
-        <v-row>
-          <v-app-bar
+  <v-app>
+    <v-app-bar
           app         
           dark
-          style="background-color:rgba(4, 49, 133, 0.308);border-radius:250px">
-            <vs-navbar shadow square center-collapsed v-model="active" style="background-color:rgba(156, 216, 175, 256)">
-              <template #left>
-                <img src="../assets/logos/Diseño2.gif" style="max-height:50px;max-width: 250px;">
-              </template>
-                <vs-navbar-item :active="active == 'docs'" id="docs">
-                  Haz Una Donación
-                </vs-navbar-item>
-                <vs-navbar-item :active="active == 'components'" id="components">
-                  Informacion
-                </vs-navbar-item>
-                <vs-navbar-item :active="active == 'license'" id="license">
-                  Contactar
-                </vs-navbar-item>
-                <template #right>
-                  <vs-button style="background-color:#28794f;color:white; font-size:16px;font-weight: bold;"  @click="dialog=true">Iniciar Sesión</vs-button>
-                 <a href=""> <b-icon  icon="question"  style="background-color: #28794f; border-radius:20px;color:white;margin-left:30px" font-scale="3" ></b-icon></a>
-                </template>
+          class="fondo">
+          <v-divider></v-divider>
+                 <v-btn style="background-color:#278d16;color:white; font-size:16px;font-weight: bold;"  @click="dialog=true">Iniciar Sesión</v-btn>
+                 <a href=""> <b-icon  icon="question"  style="background-color: #278d16; border-radius:20px;color:white;margin-left:30px" font-scale="3" ></b-icon></a>
+                
+                </v-app-bar>
+       <v-dialog v-model="dialog" max-width="350" height="400"> 
+        <div class="container h-60">
+          <div class="d-flex justify-content-center h-50">
+            <div class="user_card">
+              <div class="d-flex justify-content-center">
+                <div class="brand_logo_container">
+                  <img src="/animation.svg" class="brand_logo"  alt="Logo">
+                </div>
+              </div>
+              <div class="d-flex justify-content-center form_container">
+                <form v-on:submit.prevent>
+                  <div class="input-group mb-3">
+                    <div class="input-group-append">
+                      <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    </div>
+                    <input v-model="usuario" type="text" name="" class="form-control input_user" placeholder="Username">
+                  </div>
+                  <div class="input-group mb-2">
+                    <div class="input-group-append">
+                      <span class="input-group-text"><i class="fas fa-key"></i></span>
+                    </div>
+                    <input v-model="contrasena" type="password" name="" class="form-control input_pass" placeholder="Password">
+                  </div>
+                    <div class="d-flex justify-content-center mt-3 login_container" v-if="prueba==0">
+                 <vs-button dark  class="btn login_btn" @click="login">Iniciar Sesión</vs-button>
+                 </div>
+                 <div class="d-flex justify-content-center mt-3 login_container" v-if="prueba==1">
+                  <vs-button class="btn login_btn"  loading  dark  >
+                    Iniciar Sesión
+                  </vs-button>
+                </div>
+                 <v-snackbar
+              v-model="isBusy"
+              :timeout="2000"
+              absolute
+              bottom
               
-            </vs-navbar>
-          </v-app-bar>
-  
-          <v-dialog v-model="dialog" max-width="350" height="400"> 
-          <div class="container h-60">
-            <div class="d-flex justify-content-center h-50">
-              <div class="user_card">
-                <div class="d-flex justify-content-center">
-                  <div class="brand_logo_container">
-                    <img src="../assets/logos/TAlogin.png" class="brand_logo"  alt="Logo">
-                  </div>
-                </div>
-                <div class="d-flex justify-content-center form_container">
-                  <form v-on:submit.prevent>
-                    <div class="input-group mb-3">
-                      <div class="input-group-append">
-                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                      </div>
-                      <input v-model="usuario" type="text" name="" class="form-control input_user" placeholder="Username">
-                    </div>
-                    <div class="input-group mb-2">
-                      <div class="input-group-append">
-                        <span class="input-group-text"><i class="fas fa-key"></i></span>
-                      </div>
-                      <input v-model="contrasena" type="password" name="" class="form-control input_pass" placeholder="Password">
-                    </div>
-                      <div class="d-flex justify-content-center mt-3 login_container" v-if="prueba==0">
-                   <vs-button dark  class="btn login_btn" @click="login">Iniciar Sesión</vs-button>
-                   </div>
-                   <div class="d-flex justify-content-center mt-3 login_container" v-if="prueba==1">
-                    <vs-button class="btn login_btn"  loading  dark  >
-                      Iniciar Sesión
-                    </vs-button>
-                  </div>
-                   <v-snackbar
-                v-model="isBusy"
-                :timeout="2000"
-                absolute
-                bottom
-                
-                color="red"
-              >
-                {{msg}}
-              </v-snackbar>
-                  </form>
-                </div>
-                
-                
-                <div class="mt-4">
-                  <div class="d-flex justify-content-center links">
-                    <a href="#" style="color: black">¿olvidaste tu contraseña?</a>
-                  </div>
+              color="red"
+            >
+              {{msg}}
+            </v-snackbar>
+                </form>
+              </div>
+              
+              
+              <div class="mt-4">
+                <div class="d-flex justify-content-center links">
+                  <a href="#" style="color: black">¿olvidaste tu contraseña?</a>
                 </div>
               </div>
             </div>
           </div>
-          <!--  <vs-button flat color="#7d33ff" icon
-              @click="openNotification('top-center', '#7d33ff')">
-              <i class='bx bx-border-top' ></i>
-            </vs-button>-->
-                </v-dialog>
-
-                <v-col cols="6"
-                    xs="12">
-
-                    <div>
-                        <!--<font class="letras">¡Bienvenido!</font></div>
-                <div>
-                <img src="../assets/logo.jpg" style="width: 200px;
-            height:150; border-radius:100px; margin-left:30%">
-          -->
-                    </div>
-
-                    <div>
-                        <v-row>
-                            <v-col cols="2"
-                                xs="0">
-                            </v-col>
-                            <v-col cols="8"
-                                xs="12">
-                                <!--
-          <div class="letras2"  style="text-aling:justify">Educode es un software gratuito, sin fines de lucro. Tiene como objetivo principal enseñar conceptos basicos de programacion mediante el usode Pseudocodigos, para generar en los estudiantes un aprendizaje significativo.
-  
-          </div>-->
-                            </v-col>
-                        </v-row>
-                    </div>
-                </v-col>
-
-                <v-col cols="0">
-                </v-col>
-                <v-col cols="4"
-                    xs="0"
-                    class="mb-2 mr-sm-2 mb-sm-0"
-                    align-self="center">
-                    <!-- <img  src="../assets/ini.png" style="max-width: 500px;
-      max-height:500;">-->
-
-                </v-col>
-            </v-row>
         </div>
-       
-       <!--aqui se elimino una ventana modal-->
+        <!--  <vs-button flat color="#7d33ff" icon
+            @click="openNotification('top-center', '#7d33ff')">
+            <i class='bx bx-border-top' ></i>
+          </vs-button>-->
+              </v-dialog>
 
-    </div>
+  
+    <v-main>
+      
+         <v-row justify="end">
+           <v-col cols="6" style="background-color:rgb(0, 0, 0)">
+            <div class="card">
+              <div class="header">
+                  <img src="https://logowik.com/content/uploads/images/calendar5662.jpg" width="20%" height="50%">
+                  <span class="texto">Eventos</span>
+                  <span class="texto2">Software Sena</span>
+                
+              </div>
+              <div class="body typewriter ">
+               
+                  <p :style="{ marginBottom: paragraph.marginBottom + 'px' }"  v-for="(paragraph, index) in paragraphs" :key="index" >{{ paragraph.text }}</p>
+                               
+                
+                  
+              </div>
+              <div class="footer">
+                 
+              </div>
+          </div>
+          <div class="credit">Made with <span style="color:tomato">❤</span> by <a  href="https://www.learningrobo.com/">Learning Robo</a></div>
+    
+      
+      
+           </v-col>
+           <v-col cols="6" style="background-color:black">
+            <template>
+              <object data="/animation.svg" width="720" height="600" type="image/svg+xml"></object>
+            </template>
+           </v-col>
+         </v-row>       
+
+    
+    </v-main>
+  </v-app>
+
+     
 </template>
 <script>
 
@@ -147,10 +126,49 @@ export default {
         isBusy: false,
         prueba: 0,
         array: [],
-        rolMenu: []
+        rolMenu: [],
+        paragraphs: [
+         { text: `El software de eventos, es un software desarrollado para controlar y gestionar el resporte de horas 
+         dadas por los instructores del Sena. Sus principales caracteristicas :\r`, delay: 1,marginBottom: 20},  // Primer párrafo aparece después de 1 segundo
+        { text: `* Control que nunca se sobrepasen el reporte en horas, sobre una
+          competencia o sobre un resultado de aprenziaje.`, delay: 12000,marginBottom: 20 }, // Segundo párrafo aparece después de 2 segundos
+        { text: `* Controla que todos los resultados de aprendizaje de una competencia le sean reportadas sus horas.`, delay:22000,marginBottom: 20},   // Tercer párrafo aparece después de 3 segundos
+        { text: `* Disminuy en un 99% el error humano al momento del docente diligenciar sus eventos.`, delay: 30000,marginBottom: 20}   // Tercer párrafo aparece después de 3 segundos
+ 
+      ]
     }),
 
+    mounted() {
+      this.applyTypewriterEffect();
+    },
     methods: {
+
+      applyTypewriterEffect() {
+        const paragraphs = this.$el.querySelectorAll('.typewriter p');
+
+paragraphs.forEach((paragraph, index) => {
+  const text = paragraph.innerHTML;
+  paragraph.innerHTML = '';
+
+  let charIndex = 0;
+  
+
+  setTimeout(() => {
+    const type = () => {
+      const char = text.charAt(charIndex);
+      paragraph.innerHTML += char;
+      charIndex++;
+
+      if (charIndex < text.length) {
+        setTimeout(type, 50); // Velocidad de animación entre caracteres
+      }
+    };
+
+    type();
+  }, this.paragraphs[index].delay);
+});
+},
+
 
         login() {
             this.$router.push('dashboard/welcome');
@@ -161,23 +179,15 @@ export default {
   </script>
   <style scoped>
   
+
   .fondo{
-  background-image: url(https://th.bing.com/th/id/OIP.UlihEWPJHzmSIZqmXkNJqgHaHa?pid=ImgDet&rs=1);
+  background-image: url(../assets/imagen8.jpg);
   background-size: 100% 100%;
   background-attachment: fixed;
   width: 100%;
-  height: 120vh;
-  margin:0; 
+   margin:0; 
   }
-  .fondo2{
-    background-image:url("../assets/fondoTimeLine.png");
-  background-size: 100% 100%;
-background-attachment: fixed;
-width: 100%;
-height: 100%;
-margin:0;
-}
-
+  
 .fondoGeneral {
     background-image: url(../assets/fondo.png);
     background-size: 100% 100%;
@@ -212,18 +222,18 @@ margin:0;
 
 .user_card {
     height: 500px;
-    width: 350px;
+    width: 450px;
     margin-top: auto;
     margin-bottom: auto;
-    background: #ffffffb9;
+    background: #060606b9;
     position: relative;
     display: flex;
     justify-content: center;
     flex-direction: column;
     padding: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 rgba(175, 189, 179, 1), 0 6px 20px 0 rgba(202, 142, 142, 1);
+    -webkit-box-shadow: 0 4px 8px 0 rgb(78, 187, 57), 0 6px 20px 0 rgb(56, 146, 56);
+    -moz-box-shadow: 0 4px 8px 0 rgba(202, 93, 93, 0.2), 0 6px 20px 0 rgba(186, 215, 54, 0.19);
     border-radius: 5px;
 }
 
@@ -252,7 +262,7 @@ margin:0;
 
 .login_btn {
     width: 100%;
-    background: #0079C4 !important;
+    background: #278d16 !important;
     color: #FFFFFF !important;
     font-weight: 700;
 }
@@ -267,9 +277,10 @@ margin:0;
 }
 
 .input-group-text {
-    background: #0079C4 !important;
+    background: #278d16 !important;
     color: #FFFFFF !important;
     border: 0 !important;
+    padding-right: 20px;
     border-radius: 0.25rem 0 0 0.25rem !important;
 }
 
@@ -289,4 +300,242 @@ margin:0;
     background-attachment: fixed;
     max-height: 55px;
   }*/
+
+
+
+body{
+  background: #11998e; 
+  background: -webkit-linear-gradient(to right, #38ef7d, #11998e); 
+  background: linear-gradient(to right, #38ef7d, #11998e); 
+}
+
+.card {
+  position: relative;
+  height: 560px;
+  width: 80%;
+  background-color: #fff;
+  margin: 50px auto;
+  margin-right: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.header {
+  position: absolute;
+  height: 80px;
+  width: 95%;
+  margin:0 auto;
+  left: 0;
+  right: 0;
+  top:-30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-image: linear-gradient(to right, #078138, #30b05f);
+}
+
+.texto {
+  position : absolute;
+  left: 170px;
+  top: 20px;
+  font-size: x-large;
+  color: white;
+}
+
+.texto2 {
+  position : absolute;
+  left: 170px;
+  top: 48px;
+  font-size: x-small;
+  color: white;
+}
+
+
+.header img {
+  position: absolute;
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  left: 90px;
+  top: 10px;
+}
+
+.header h3 {
+  position: absolute;
+  font-family: sans-serif;
+  color: white;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  top: 118px;
+  left: 90px;
+}
+
+.header p {
+  position: absolute;
+  font-family: sans-serif;
+  color: rgb(236, 233, 233);
+  font-size: 13px;
+  top: 166px;
+  left: 90px
+}
+
+.body {
+  position: absolute;
+  height: 126px;
+  left: 5px;
+  right: 5px;
+  top: 15%;
+  border-radius: 12px;
+}
+
+.body ul {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  
+}
+
+.body ul li {
+  position: absolute;
+  list-style: none;
+  display: block;
+  height: 40px;
+  width: 100%;
+  left: 0;
+  right: 0;
+  border-radius: 12px;
+  background-color: transparent;
+  transition: all .3s ease-in-out;
+}
+
+.body ul li p,
+h3,
+i {
+  position: absolute;
+}
+
+.body ul li h3 {
+  top: -17px;
+  left: 58px;
+  color: #16a085;
+  
+}
+
+.body ul li p {
+  top: 14px;
+  left: 59px;
+  font-size: 12px;
+  font-family: sans-serif;
+  color: #16a085;
+}
+
+.body ul li i {
+  left: 8px;
+  top: 7px;
+  color: #16a085;
+  font-size: 26px;
+}
+
+.body ul li:nth-child(1) {
+  top: -16px;
+}
+
+.body ul li:nth-child(2) {
+  top: 26px;
+}
+
+.body ul li:nth-child(3) {
+  top: 68px;
+}
+
+.body ul li:nth-child(1) i {
+  left: 12px;
+}
+
+.body li:hover {
+  background-color: #16a085;
+  cursor: pointer;
+}
+
+.body li:hover i{color:#fff}
+.body li:hover h3{color:#fff}
+.body li:hover p{color:#fff}
+/*footer*/
+
+.footer {
+  position: absolute;
+  height: 80px;
+  bottom: -30px;
+  left: 0;
+  right: 0;
+  border-radius: 12px;
+  width:95%;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-image: linear-gradient(to right, #078138, #30b05f);
+}
+
+.footer ul {
+  position: absolute;
+  left: -60px;
+}
+
+.footer ul li {
+  display: inline-block;
+  margin-left: 60px;
+}
+
+.footer ul li i {
+  font-size: 30px;
+  color: #000;
+  transition: all .3s ease-in;
+}
+
+.footer ul li:hover i {
+  transform: scale(0.9);
+  color: #fff;
+  cursor: pointer;
+}
+
+.credit a{
+  text-decoration: none;
+  color: #fff;
+  
+}
+
+.credit{
+  text-align: center;
+}
+
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: orange; }
+}
+
+.margen{
+  margin-bottom: 80px;
+
+}
+
+.typewriter p {
+  overflow: hidden;
+  border-right: .15em solid orange;
+
+ /* white-space: nowrap;*/
+  margin: 0;
+  letter-spacing: .15em;
+  animation: typing 3s steps(40, end), blink-caret .75s step-end infinite;
+}
+
+
+
+
 </style>
