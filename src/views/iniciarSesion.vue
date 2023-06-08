@@ -88,13 +88,10 @@
                   
               </div>
               <div class="footer">
-                 
+                 <img src="https://www.opinioncaribe.com/wp-content/uploads/2017/08/sena.jpg" width="70px" height="70px">
               </div>
           </div>
-          <div class="credit">Made with <span style="color:tomato">❤</span> by <a  href="https://www.learningrobo.com/">Learning Robo</a></div>
-    
-      
-      
+                
            </v-col>
            <v-col cols="6" style="background-color:black">
             <template>
@@ -465,6 +462,9 @@ i {
 /*footer*/
 
 .footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   height: 80px;
   bottom: -30px;
