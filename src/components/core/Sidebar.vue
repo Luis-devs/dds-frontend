@@ -149,6 +149,27 @@ import LogoSVG from '@/assets/logos/DisenoAnimado.svg';
                       ],
 
                   },
+                  {
+                      
+                      title: 'Instructor',
+                      icon: 'mdi mdi-home-variant',
+
+                      child: [
+                          {
+                              href: '/dashboard/crearinstructor',
+                              title: 'Crear'
+                          },
+                          {
+                              href: '/dashboard/listarcompetencia',
+                              title: 'Listar'
+                          },
+                          {
+                              href: '/dashboard/crearresultadoaprendizaje',
+                              title: 'Resultados de Aprendizaje'
+                          }
+                      ],
+
+                  },
                 ],
     
     

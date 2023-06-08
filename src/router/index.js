@@ -70,6 +70,12 @@ const routes = [{
                 path: '/dashboard/crearresultadoaprendizaje',
                 component: () =>
                     import ('../views/ResultadosAprendizaje/CrearResultadosAprendizaje.vue')
+            },
+            {
+                name: 'crearinstructor',
+                path: '/dashboard/crearinstructor',
+                component: () =>
+                    import ('../views/Instructor/CrearInstructor.vue')
             }
 
         ],
