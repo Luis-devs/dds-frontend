@@ -35,18 +35,18 @@
           </v-tab>
         </v-tabs>
       </template>
-    </v-toolbar>
 
+    </v-toolbar>
+    <v-form ref="form">
     <v-tabs-items v-model="tab">
       <v-tab-item>
         <v-card flat>
           <v-card-text >
-            <v-card width="600">
+            <v-card width="800">
               <v-card-text class="carta">
-                <v-form ref="form">
-                 <v-container>
+               
                   <v-row>
-                   <v-col cols="8">
+                   <v-col cols="12">
                       <v-row>
                         <v-col cols="8">
                          <v-text-field type="number" label="Documento identificación" prepend-icon="mdi-credit-card"
@@ -66,21 +66,21 @@
                 <v-row>
                   <v-col cols="6">
                     <v-text-field label="Correo" prepend-icon="mdi-gmail" v-model="paquete.correo"
-                       :rules="amposRules"></v-text-field>
+                       :rules="emailRules"></v-text-field>
                   </v-col>
                   <v-col cols="6">
                      <v-text-field type="number" label="Celular" prepend-icon="mdi-cellphone" v-model="paquete.celular"
                        :rules="camposRules"></v-text-field>
                   </v-col>
                  </v-row>
-                </v-container>
-               </v-form>
+                
+              
              </v-card-text>
           </v-card>
          </v-card-text>
         </v-card>
        </v-tab-item>
-     
+   
        <v-tab-item>
         <v-card flat>
                 <v-col>
@@ -93,7 +93,7 @@
                                 <v-menu ref="fechainicio" v-model="fini" :close-on-content-click="false" :return-value.sync="date"
                                     transition="scale-transition" offset-y min-width="auto">
                                      <template v-slot:activator="{ on, attrs }">
-                                        <v-text-field v-model="paquete.contrato.fechaInicio" label="Fecha de Inicio"
+                                        <v-text-field :rules="camposRules" v-model="paquete.contrato.fechaInicio" label="Fecha de Inicio"
                                           prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
                                      </template>
                                      <v-date-picker v-model="paquete.contrato.fechaInicio" no-title scrollable>
@@ -109,7 +109,7 @@
                             <v-menu ref="menu2" v-model="ffin" :close-on-content-click="false" :return-value.sync="date"
                                 transition="scale-transition" offset-y min-width="auto">
                                 <template v-slot:activator="{ on, attrs }">
-                                   <v-text-field v-model="paquete.contrato.fechaTerminacion" label="Fecha de Finalización"
+                                   <v-text-field :rules="camposRules" v-model="paquete.contrato.fechaTerminacion" label="Fecha de Finalización"
                                    prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
                                 </template>
                                 <v-date-picker v-model="paquete.contrato.fechaTerminacion" no-title scrollable>
@@ -124,7 +124,7 @@
 
                          <v-row>
                             <v-col>
-                              <v-select :items="tipovinculacion" item-text="nombre" item-value="nombre"
+                              <v-select :rules="camposRules" :items="tipovinculacion" item-text="nombre" item-value="nombre"
                                 label="Seleccione tipo de vinculación" v-model="paquete.contrato.tipoVinculacion"
                                 prepend-icon="map"></v-select>
                            </v-col>
@@ -132,15 +132,18 @@
                        </v-card-text>
                   </v-card>
                 </v-col>
-             
+                <v-row justify="center">
+                    <v-btn class="ma-2 mb-5" outlined color="indigo" @click="guardar()">
+                        Crear Instructor
+                      </v-btn>
+                </v-row>
+
         </v-card>
       </v-tab-item>
+      
     </v-tabs-items>
-    <v-card-actions>
-  <v-btn class="ma-2" outlined color="indigo" @click="guardar()">
-    Crear
-  </v-btn>
-</v-card-actions>
+</v-form>
+  
   </v-card>
 </template>
     </v-row>
@@ -173,8 +176,7 @@ export default {
         items: [
           'DATOS PERSONALES', 'INFORMACION CONTRATO',
         ],
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-      fini: false,
+       fini: false,
       ffin: false,
       tipovinculacion: [],
       paquete: {
@@ -194,29 +196,34 @@ export default {
       mensaje: '',
       color: '',
       show: false,
-      niveles: ['Tecnico', 'Tecnologo', 'Operario', 'Auxiliar', 'Especializacion'],
-      camposRules: [
+       camposRules: [
         v => !!v || 'Campo es requerido'
-      ]
+      ],
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ],
     }
   },
 
   methods: {
     async guardar() {
+        var vm = this
       if (this.$refs.form.validate()) {
-        await axios.post('http://159.223.110.82:3000/programas/crear', this.paquete)
+          await axios.post('http://159.223.110.82:3000/instructor/crear', this.paquete)
           .then(function (response) {
             console.log(response);
           })
           .catch(function (error) {
-            this.mensaje = `Se ha producido un error : ${error}`
-            this.color = 'red'
-            this.show = true
+            vm.mensaje = `Se ha producido un error : ${error}`
+            vm.color = 'red'
+            vm.show = true
           })
           .finally(function () {
-            this.mensaje = 'Programa Guardado con exito'
-            this.color = '#aaddff'
-            this.show = true
+            vm.mensaje = 'Instructor creador con exito'
+            vm.color = '#aaddff'
+            vm.show = true
+            vm.$refs.form.reset()
           });
 
       }
