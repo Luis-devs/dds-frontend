@@ -1,9 +1,9 @@
 <template>
     <v-container>
       <v-row justify="space-around">
-        <v-card width="600">
+        <v-card width="800">
   
-          <v-app-bar flat color="rgba(156, 216, 175, 256)" >
+          <v-app-bar flat color="orange" >
             
   
             <v-toolbar-title class=" text-h6 white--text pl-0">
@@ -21,7 +21,7 @@
             <v-form>
               <v-container>
                 <v-row>
-                  <v-col cols="7">
+                  <v-col cols="8">
   
                     <v-row>
                       <v-col cols="6">
@@ -60,7 +60,7 @@
                          </v-col>
                     </v-row>
                   </v-col>
-                  <v-col cols="5">
+                  <v-col cols="4">
                     <img width="100%" height="100%"
                       src="https://www.sena.edu.co/es-co/sena/PublishingImages/regionales.jpg">
   

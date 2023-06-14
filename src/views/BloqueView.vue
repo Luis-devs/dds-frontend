@@ -1,13 +1,13 @@
 <template>
     <v-container>
       <v-row justify="space-around">
-        <v-card width="600">
+        <v-card width="800">
   
-          <v-app-bar flat color="rgba(156, 216, 175, 256)" >
+          <v-app-bar flat color="red" >
             
   
             <v-toolbar-title class=" text-h6 white--text pl-0">
-              CREAR AMBIENTE
+              CREAR BLOQUE
             </v-toolbar-title>
   
             <v-spacer></v-spacer>

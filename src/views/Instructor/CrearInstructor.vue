@@ -160,6 +160,7 @@
 
 import axios from 'axios';
 import mensaje from '../../components/MensajesView.vue'
+const fc = require('festivos-colombia');
 
 export default {
   props: {
@@ -235,6 +236,10 @@ export default {
     const tipos = await axios.get(`${url}/tipo-de-vinculacion`);
     console.log(tipos.data)
     this.tipovinculacion = tipos.data;
+
+    let holidays = fc.getHolidaysByYear(2013);
+    console.log(JSON.stringify(holidays))
+
   },
 
 }

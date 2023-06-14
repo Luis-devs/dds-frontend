@@ -95,14 +95,37 @@ import LogoSVG from '@/assets/logos/DisenoAnimado.svg';
                         icon: 'mdi mdi-home-variant'
                     },
                     {
-                        href: '/dashboard/ambiente',
-                        title: 'Ambiente',
+                        title: 'Infra-estructura',
                         icon: 'mdi mdi-home-variant',
 
                         child: [
                             {
-                                href: '/dashboard/bloque',
-                                title: 'Bloque'
+                                title: 'Ambiente',
+                                child: [
+                                 {
+                                    href: '/dashboard/ambiente',
+                                    title: 'Crear',
+                                 },
+                                 {
+                                    href: '/dashboard/listarambiente',
+                                    title: 'Listar',
+                                 }
+                                ],
+
+                            },
+                            {
+                                title: 'Bloque',
+                                child: [
+                                 {
+                                    href: '/dashboard/bloque',
+                                    title: 'Crear',
+                                 },
+                                 {
+                                    href: '/dashboard/listarbloque',
+                                    title: 'Listar',
+                                 }
+                                ],
+
                             },
                             {
                                 href: '/dashboard/tipoAmbiente',
@@ -124,7 +147,24 @@ import LogoSVG from '@/assets/logos/DisenoAnimado.svg';
                             {
                                 href: '/dashboard/listarprograma',
                                 title: 'Listar'
-                            }
+                            },
+
+                         {
+                        title:  ' * Ficha',
+                        
+
+                        child: [
+                            {
+                                href: '/dashboard/crearficha',
+                                title: 'Crear Ficha'
+                            },
+                            {
+                                href: '/dashboard/listarfichas',
+                                title: 'Listar'
+                            },
+                            
+                        ],
+                         },
                         ],
 
                     },

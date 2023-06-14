@@ -76,6 +76,12 @@ const routes = [{
                 path: '/dashboard/crearinstructor',
                 component: () =>
                     import ('../views/Instructor/CrearInstructor.vue')
+            },
+            {
+                name: 'crearficha',
+                path: '/dashboard/crearficha',
+                component: () =>
+                    import ('../views/Ficha/CrearFicha.vue')
             }
 
         ],
