@@ -28,7 +28,7 @@
                   <v-row cols="12" class="mx-2">
                     <v-text-field
                       class="mr-2"
-                      v-model="paquete.startDate"
+                      v-model="paquete.fechaInicio"
                       type="date"
                       label="Fecha de inicio"
                       @input="validarFecha"
@@ -36,7 +36,7 @@
                     ></v-text-field>
                     <v-text-field
                       class="ml-2"
-                      v-model="paquete.endDate"
+                      v-model="paquete.fechaFin"
                       type="date"
                       label="Fecha de fin"
                       outlined
@@ -47,19 +47,40 @@
                   <v-row cols="12">
                     <v-col cols="6">
                       <v-select
-                        :items="departamentos"
-                        item-text="departamento"
-                        item-value="departamento"
-                        label="Selecciones Ambiente"
-                        v-model="paquete.ambiente"
+                        :items="sedes"
+                        item-text="nombre"
+                        item-value="_id"
+                        label="Seleccione Sede"
+                        v-model="paquete.sede"
                         append-icon="school"
                       ></v-select>
                     </v-col>
                     <v-col cols="6">
                       <v-select
-                        :items="departamentos"
-                        item-text="departamento"
-                        item-value="departamento"
+                        :items="ambientesVista"
+                        item-text="codigo"
+                        item-value="_id"
+                        label="Seleccione Ambiente"
+                        v-model="paquete.ambiente"
+                        append-icon="book"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+
+                  <v-row>
+                    <v-col cols="6">
+                      <v-text-field
+                        label="Buscar Programa"
+                        append-icon="mdi-magnify"
+                        v-model="textoBusqueda"
+                        @keyup="actualizarProgramas()"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-select
+                        :items="programaVista"
+                        item-text="nombre"
+                        item-value="_id"
                         label="Seleccione Programa"
                         v-model="paquete.programa"
                         append-icon="book"
@@ -70,9 +91,9 @@
                   <v-row>
                     <v-col cols="6">
                       <v-select
-                        :items="departamentos"
-                        item-text="departamento"
-                        item-value="departamento"
+                        :items="instructores"
+                        item-text="nombre"
+                        item-value="_id"
                         label="Seleccione Intructor"
                         v-model="paquete.instructor"
                         append-icon="mdi-account"
@@ -87,17 +108,17 @@
                         item-text="diasSemana"
                         item-value="diasSemana"
                         label="Seleccione Día"
-                        v-model="paquete.dia"
+                        v-model="dia"
                         append-icon="mdi-calendar"
                       ></v-select>
                     </v-col>
                     <v-col cols="6">
                       <v-select
-                        :items="jornada"
-                        item-text="jornadas"
-                        item-value="jornadas"
+                        :items="jornadas"
+                        item-text="descripcion"
+                        item-value="desctipcion"
                         label="Seleccione Jornada"
-                        v-model="paquete.jornada"
+                        v-model="jornadaInput"
                         append-icon="mdi-calendar"
                       ></v-select>
                     </v-col>
@@ -107,37 +128,24 @@
             </v-container>
           </v-form>
         </v-card-text>
+
         <v-card-actions class="mx-12">
           <v-btn class="ma-2" color="secondary" @click="agregarLista">
             Agregar
           </v-btn>
+        </v-card-actions>
+
+        <v-data-table
+          :items="paquete.jornadas"
+          :headers="cabeceraTabla"
+          class="elevation-1 mx-12 my-6"
+        ></v-data-table>
+
+        <v-card-actions class="mx-12">
           <v-btn class="ma-2" color="rgb(52,188,52)" @click="guardar()">
             Crear
           </v-btn>
         </v-card-actions>
-        <v-data-table
-          :items="listItems"
-          :headers="tablaHeaders"
-          class="elevation-1 mx-12 my-6"
-        ></v-data-table>
-
-        <table class="table table-white mx-12 my-6">
-          <thead>
-            <tr>
-              <th v-for="title in titles" :key="title">
-                {{ title }}
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr v-for="item in listItems" :key="item.dia">
-              <td>{{ item.dia }}</td>
-
-              <td>{{ item.jornada }}</td>
-            </tr>
-          </tbody>
-        </table>
       </v-card>
     </v-row>
 
@@ -154,87 +162,141 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!--
     <pre>
           {{ $data }}
         </pre
     >
+    -->
   </v-container>
 </template>
 
 <script>
 import axios from "axios";
 import dia from "../../json/dia";
-import jornadas from "../../json/jornada";
 
 export default {
   props: {
     datos: Object,
-    // mostrar: Boolean,
   },
   data() {
     return {
       paquete: {
         codigo: null,
-        startDate: null,
-        endDate: null,
+        fechaInicio: null,
+        fechaFin: null,
+        sede: null,
         ambiente: null,
         programa: null,
         instructor: null,
-        dia: null,
-        jornada: null,
+        jornadas: [],
       },
       // titulos de la primera tabla
-      tablaHeaders: [
+      cabeceraTabla: [
         { text: "Día", value: "dia" },
         { text: "Jornada", value: "jornada" },
+        { text: "Hora Inicio", value: "horaInicio" },
+        { text: "Hora Fin", value: "horaFin" },
       ],
-      // titulos de la segunda tabla
-      titles: ["Día", "Jornada"],
       // items de la tabla
       listItems: [],
+      // datos de del backend
+      ambientes: null,
+      programas: null,
+      sedes: null,
+      instructores: null,
       diasSemana: null,
-      jornada: null,
+      jornadaInput: null,
       mostrar: false,
       modalTitle: "",
       modalText: "",
+      dia: null,
+      textoBusqueda: "",
+      programaVista: [],
     };
   },
 
   methods: {
     async guardar() {
+      this.agregarFormatoFecha;
+
+      let respuesta = null;
       await axios
-        // TODO: Agregar el endpoint
-        .post("http://159.223.110.82:3000/", this.paquete)
+        .post("http://localhost:3000/ficha/crear", this.paquete)
         .then(function (response) {
           console.log(response);
+          respuesta = response;
         })
         .catch(function (error) {
-          // handle error
           console.log(error);
-        })
-        .finally(function () {
-          // always executed
+          respuesta = error.response;
         });
+
+      if (respuesta.status == 201) {
+        this.mostrarModal("Exito", "Ficha creada correctamente");
+      } else if (respuesta.status == 400) {
+        let errores = JSON.parse(respuesta.request.response);
+        this.mostrarModal(
+          "Error al crear la ficha, vuelva a intentarlo",
+          errores.message
+        );
+      }
     },
 
     agregarLista() {
-      if (this.paquete.dia == null || this.paquete.jornada == null) {
+      if (this.dia == null || this.jornadaInput == null) {
         this.mostrarModal("Error", "Debe seleccionar un día y una jornada");
         return;
       }
 
-      this.listItems.push({
-        dia: this.paquete.dia,
-        jornada: this.paquete.jornada,
+      let indice = null;
+      for (let i = 0; i < this.jornadas.length; i++) {
+        if (this.jornadas[i].descripcion.includes(this.jornadaInput)) {
+          indice = i;
+          break; // Si se encuentra el item, se sale del bucle
+        }
+      }
+
+      this.paquete.jornadas.push({
+        dia: this.dia,
+        jornada: this.jornadaInput,
+        horaInicio: this.jornadas[indice].horaInicio,
+        horaFin: this.jornadas[indice].horaFin,
       });
 
-      this.paquete.dia = null;
-      this.paquete.jornada = null;
+      this.dia = null;
+      this.jornadaInput = null;
+    },
+
+    agregarFormatoFecha() {
+      if (this.paquete.fechaInicio != null && this.paquete.fechaFin != null) {
+        if (
+          !this.paquete.fechaInicio.includes("T") &&
+          !this.paquete.fechaFin.includes("T")
+        ) {
+          this.paquete.fechaInicio =
+            this.paquete.fechaInicio + "T00:00:00.000Z";
+          this.paquete.fechaFin = this.paquete.fechaFin + "T00:00:00.000Z";
+          return true;
+        }
+      }
+      return false;
+    },
+
+    validarJoornadas() {
+      if (this.paquete.jornadas.length == 0) {
+        this.mostrarModal(
+          "Error",
+          "Debe agregar al menos una jornada a la ficha"
+        );
+        return false;
+      }
+      return true;
     },
 
     validarFecha() {
-      const fechaInicio = this.paquete.startDate.split("-");
-      const fechaFin = this.paquete.endDate.split("-");
+      const fechaInicio = this.paquete.fechaInicio.split("-");
+      const fechaFin = this.paquete.fechaFin.split("-");
 
       const fechaInicioObj = new Date(
         fechaInicio[0],
@@ -249,8 +311,6 @@ export default {
         isNaN(fechaFinObj.getTime()) ||
         fechaInicioObj > fechaFinObj
       ) {
-        this.paquete.startDate = null;
-        this.paquete.endDate = null;
         this.mostrarModal(
           "Error",
           "La fecha de inicio debe ser menor a la fecha de fin"
@@ -259,6 +319,14 @@ export default {
       }
 
       return true; // Las fechas son válidas
+    },
+
+    actualizarProgramas() {
+      this.programaVista = this.programas.filter(
+        (item) =>
+          item.codigo.includes(this.textoBusqueda) ||
+          item.nombre.includes(this.textoBusqueda)
+      );
     },
 
     mostrarModal(title, message) {
@@ -273,23 +341,39 @@ export default {
 
   created() {
     this.diasSemana = dia;
-    this.jornada = jornadas;
   },
 
   async mounted() {
-    const response = await axios.get("http://10.187.145.190:3000/regional");
-    this.regionales = response.data;
+    // obtenemos las jornadas
+    const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
+    const response = await axios.get(`${api}/jornada/`);
+    this.jornadas = response.data;
+
+    // obtener los ambientes
+    const sedesResponse = await axios.get(`${api}/sedes/`);
+    this.sedes = sedesResponse.data;
+
+    // obtener los ambientes
+    const ambientesResponse = await axios.get(`${api}/ambiente/`);
+    this.ambientes = ambientesResponse.data;
+
+    // obtener los programas
+    const programasResponse = await axios.get(`${api}/programas/`);
+    this.programas = programasResponse.data;
+    this.programaVista = this.programas;
+
+    // obtener instructores
+    const instructoresResponse = await axios.get(`${api}/instructor/`);
+    this.instructores = instructoresResponse.data;
   },
 
   computed: {
-    ambient() {
-      var tipoAmb = null;
-      for (let pos in this.typeAmbiente) {
-        if (this.typeAmbiente[pos] == this.paquete.tipo) {
-          tipoAmb = this.typeAmbiente[pos].tipoAmb;
-        }
+    ambientesVista() {
+      if (this.paquete.sede == null) {
+        return [];
       }
-      return tipoAmb;
+
+      return this.ambientes.filter((item) => item.sede == this.paquete.sede);
     },
   },
 };
