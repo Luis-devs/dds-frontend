@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="space-around">
       <v-card width="600">
-        <v-app-bar flat color="rgba(0, 0, 0, 0)" class="fondo">
+        <v-app-bar flat color="rgba(156, 216, 175, 256)">
           <v-app-bar-nav-icon color="white"></v-app-bar-nav-icon>
 
           <v-toolbar-title class="text-h6 white--text pl-0">
@@ -20,63 +20,59 @@
           <v-form>
             <v-container>
               <v-row>
-                <v-col cols="7">
-                  <v-row>
-                    <v-col cols="6">
-                      <v-text-field
-                        label="Nombre de la sede"
-                        v-model="paquete.nombre"
-                      >
-                      </v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-select
-                        label="Centro"
-                        prepend-icon="map"
-                        :items="centros"
-                        item-text="nombre"
-                        v-model="paquete.centro"
-                        item-value="_id"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
+                <v-col cols="6">
+                  <v-text-field
+                    label="Nombre de la sede"
+                    v-model="paquete.nombre"
+                    :rules="camposRules"
+                  >
+                  </v-text-field>
                 </v-col>
-                <v-col cols="5">
-                  <img
-                    width="100%"
-                    height="100%"
-                    src="https://www.sena.edu.co/es-co/Noticias/NoticiasImg/BP-sede_Gomez_Plata_19082021.jpeg"
-                  />
+                <v-col cols="6">
+                  <v-select
+                    label="Centro"
+                    prepend-icon="map"
+                    :items="centros"
+                    item-text="nombre"
+                    v-model="paquete.centro"
+                    :rules="camposRules"
+                    item-value="_id"
+                  ></v-select>
                 </v-col>
-                <v-text-field
-                  label="Lugar de funcionamiento"
-                  v-model="paquete.lugar_funcionamiento"
-                >
-                </v-text-field>
-                <v-row>
-                  <v-col cols="6">
-                    <v-select
-                      :items="departamentos"
-                      item-text="departamento"
-                      item-value="departamento"
-                      label="Selecciones departamento"
-                      prepend-icon="map"
-                      v-model="paquete.departamento"
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-select
-                      :items="ciuda"
-                      label="Selecciones una ciudad"
-                      v-model="paquete.municipio"
-                      color="black"
-                      item-color="black"
-                      prepend-icon="map"
-                    ></v-select>
-                  </v-col>
-                </v-row>
+              </v-row>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    label="Lugar de funcionamiento"
+                    v-model="paquete.lugar_funcionamiento"
+                    :rules="camposRules"
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="6">
+                  <v-select
+                    :items="departamentos"
+                    item-text="departamento"
+                    item-value="departamento"
+                    label="Seleccione departamento"
+                    prepend-icon="map"
+                    v-model="paquete.departamento"
+                    :rules="camposRules"
+                  ></v-select>
+                </v-col>
+                <v-col cols="6">
+                  <v-select
+                    :items="ciuda"
+                    label="Seleccione una ciudad"
+                    v-model="paquete.municipio"
+                    :rules="campoRules"
+                    color="black"
+                    item-color="black"
+                    prepend-icon="map"
+                  ></v-select>
+                </v-col>
               </v-row>
             </v-container>
           </v-form>
@@ -88,6 +84,12 @@
         </v-card-actions>
       </v-card>
     </v-row>
+    <pre>
+
+{{ $data }}
+
+</pre
+    >
   </v-container>
 </template>
 <script>
@@ -109,6 +111,7 @@ export default {
         municipio: null,
       },
       departamentos: colombia,
+      camposRules: [(v) => !!v || "Campo es requerido"],
     };
   },
 
@@ -141,9 +144,11 @@ export default {
     },
   },
   async mounted() {
-    const response = await axios.get("http://10.187.145.190:3000/centro/");
+    const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
+    const response = await axios.get(`${api}/centro/`);
 
     this.centros = response.data;
+    console.log(this.centros);
   },
 };
 </script>

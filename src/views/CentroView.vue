@@ -14,67 +14,59 @@
           <v-form>
             <v-container>
               <v-row>
-                <v-col cols="7">
-                  <v-row>
-                    <v-col cols="6">
-                      <v-text-field
-                        label="Codigo del centro"
-                        prepend-icon="mdi-key"
-                        v-model="paquete.codigo"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        label="Nombre"
-                        prepend-icon="mdi-key"
-                        v-model="paquete.nombre"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-
-                  <v-row>
-                    <v-col cols="6">
-                      <v-select
-                        :items="departamentos"
-                        item-text="departamento"
-                        item-value="departamento"
-                        label="Selecciones departamento"
-                        v-model="paquete.departamento"
-                        prepend-icon="map"
-                      ></v-select>
-                    </v-col>
-                    <v-col cols="6">
-                      <v-select
-                        :items="ciuda"
-                        label="Selecciones una ciudad"
-                        v-model="paquete.municipio"
-                        color="black"
-                        item-color="black"
-                        prepend-icon="map"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col>
-                      <v-select
-                        :items="regionales"
-                        item-text="nombre"
-                        item-value="_id"
-                        label="Selecciones regional"
-                        prepend-icon="map"
-                        v-model="paquete.regional"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
+                <v-col cols="6">
+                  <v-text-field
+                    label="Codigo del centro"
+                    prepend-icon="mdi-key"
+                    v-model="paquete.codigo"
+                    :rules="camposRules"
+                  ></v-text-field>
                 </v-col>
-                <v-col cols="5">
-                  <img
-                    width="100%"
-                    height="100%"
-                    src="https://www.sena.edu.co/es-co/sena/PublishingImages/regionales.jpg"
-                  />
+                <v-col cols="6">
+                  <v-text-field
+                    label="Nombre"
+                    prepend-icon="mdi-key"
+                    v-model="paquete.nombre"
+                    :rules="camposRules"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col cols="6">
+                  <v-select
+                    :items="departamentos"
+                    item-text="departamento"
+                    item-value="departamento"
+                    label="Seleccione departamento"
+                    v-model="paquete.departamento"
+                    :rules="camposRules"
+                    prepend-icon="map"
+                  ></v-select>
+                </v-col>
+                <v-col cols="6">
+                  <v-select
+                    :items="ciuda"
+                    label="Seleccione una ciudad"
+                    v-model="paquete.municipio"
+                    :rules="camposRules"
+                    color="black"
+                    item-color="black"
+                    prepend-icon="map"
+                  ></v-select>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-select
+                    :items="regionales"
+                    item-text="nombre"
+                    item-value="_id"
+                    label="Seleccione regional"
+                    prepend-icon="map"
+                    v-model="paquete.regional"
+                    :rules="camposRules"
+                  ></v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -120,6 +112,7 @@ export default {
       },
       regionales: null,
       departamentos: colombia,
+      camposRules: [(v) => !!v || "Campo es requerido"],
     };
   },
 
