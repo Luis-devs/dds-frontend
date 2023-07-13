@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-row justify="space-around">
-      <v-card width="800">
-        <v-app-bar flat color="rgba(156, 216, 175, 256)">
+      <v-card width="600">
+        <v-app-bar flat color="rgb(52,188,52)">
           <v-toolbar-title class="text-h6 white--text pl-0">
             CREAR BLOQUE
           </v-toolbar-title>
@@ -14,27 +14,21 @@
           <v-form>
             <v-container>
               <v-row>
-                <v-col cols="12">
-                  <v-row>
-                    <v-col cols="6">
-                      <v-text-field
-                        label="Nombre"
-                        prepend-icon="mdi-key"
-                        v-model="paquete.nombre"
-                        :rules="camposRules"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        label="Nomenclatura"
-                        prepend-icon="mdi-key"
-                        v-model="paquete.nomenclatura"
-                        :rules="camposRules"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
+                <v-col cols="6">
+                  <v-text-field
+                    label="Nombre"
+                    prepend-icon="mdi-key"
+                    v-model="paquete.nombre"
+                    :rules="camposRules"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field
+                    label="Nomenclatura"
+                    prepend-icon="mdi-key"
+                    v-model="paquete.nomenclatura"
+                    :rules="camposRules"
+                  ></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -47,6 +41,7 @@
         </v-card-actions>
       </v-card>
     </v-row>
+
     <pre>
         {{ $data }}
       </pre

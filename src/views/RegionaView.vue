@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="space-around">
       <v-card width="600">
-        <v-app-bar flat color="rgba(156, 216, 175, 256)">
+        <v-app-bar flat color="rgb(52,188,52)">
           <v-app-bar-nav-icon color="white"></v-app-bar-nav-icon>
 
           <v-toolbar-title class="text-h6 white--text pl-0">
@@ -71,6 +71,31 @@
         </v-card-actions>
       </v-card>
     </v-row>
+    <v-row justify="space-around">
+      <v-card width="800" class="mt-12">
+        <v-data-table
+          :items="listItems"
+          :headers="cabeceraTabla"
+          class="elevation-1 mx-12 my-6"
+        ></v-data-table>
+        <button
+          type="button"
+          class="btn btn-outline-info"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          @click="editPeople(index)"
+        >
+          <i class="bi bi-pencil-square"></i> Editar
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          @click="deletePeople(index)"
+        >
+          <i class="bi bi-trash"></i> Eliminar
+        </button>
+      </v-card>
+    </v-row>
     <pre>
            {{ $data }}
         </pre
@@ -92,7 +117,17 @@ export default {
         nombre: null,
         departamento: null,
         municipio: null,
+        editar: "Editar",
       },
+      cabeceraTabla: [
+        { text: "Codigo", value: "codigo" },
+        { text: "Nombre", value: "nombre" },
+        { text: "Municipio", value: "municipio" },
+        { text: "Departamento", value: "departamento" },
+        { text: "Acciones", value: "editar" },
+      ],
+      // items de la tabla
+      listItems: [],
       departamentos: colombia,
       camposRules: [(v) => !!v || "Campo es requerido"],
     };
@@ -126,6 +161,12 @@ export default {
       }
       return ciudades;
     },
+  },
+  async mounted() {
+    // obtenemos las jornadas
+    const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
+    const response = await axios.get(`${api}/regional/`);
+    this.listItems = response.data;
   },
 };
 </script>

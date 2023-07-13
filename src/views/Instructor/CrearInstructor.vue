@@ -4,7 +4,7 @@
     <v-row justify="space-around">
       <template>
         <v-card width="700">
-          <v-toolbar color="rgba(156, 216, 175, 256)" dark flat>
+          <v-toolbar color="rgb(52,188,52)" dark flat>
             <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
             <v-toolbar-title>DATOS DEL CONTRATO</v-toolbar-title>

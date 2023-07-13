@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="space-around">
       <v-card width="600">
-        <v-app-bar flat color="rgba(156, 216, 175, 256)">
+        <v-app-bar flat color="rgb(52,188,52)">
           <v-toolbar-title class="text-h6 white--text pl-0">
             CREAR CENTRO
           </v-toolbar-title>

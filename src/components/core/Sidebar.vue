@@ -204,7 +204,8 @@ export default {
 <style scoped>
 .fon {
   /* background-image:url("../../assets/images/sidebar/abstract4.jpg");*/
-  background-image: url("../../assets/imagen5.jpg");
+  /* background-image: url("../../assets/imagen5.jpg"); */
+  background-color: #088239;
   background-size: 100% 100%;
   background-attachment: fixed;
   width: 100%;
@@ -213,8 +214,8 @@ export default {
 }
 .letra {
   color: #ffffff;
-  font-size: 20px;
-  font-family: "Mystery Quest";
+  font-size: 30px;
+  font-family: "Montserrat";
   font-weight: 400;
 }
 </style>
