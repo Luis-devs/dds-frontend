@@ -21,6 +21,7 @@
                         label="Código"
                         append-icon="mdi-key"
                         v-model="paquete.codigo"
+                        :rules="camposRules"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -33,6 +34,7 @@
                       label="Fecha de inicio"
                       @input="validarFecha"
                       outlined
+                      :rules="camposRules"
                     ></v-text-field>
                     <v-text-field
                       class="ml-2"
@@ -41,6 +43,7 @@
                       label="Fecha de fin"
                       outlined
                       @input="validarFecha"
+                      :rules="camposRules"
                     ></v-text-field>
                   </v-row>
 
@@ -53,6 +56,7 @@
                         label="Seleccione Sede"
                         v-model="paquete.sede"
                         append-icon="school"
+                        :rules="camposRules"
                       ></v-select>
                     </v-col>
                     <v-col cols="6">
@@ -63,6 +67,7 @@
                         label="Seleccione Ambiente"
                         v-model="paquete.ambiente"
                         append-icon="book"
+                        :rules="camposRules"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -73,6 +78,7 @@
                         label="Buscar Programa"
                         append-icon="mdi-magnify"
                         v-model="textoBusqueda"
+                        :rules="camposRules"
                         @keyup="actualizarProgramas()"
                       ></v-text-field>
                     </v-col>
@@ -84,6 +90,7 @@
                         label="Seleccione Programa"
                         v-model="paquete.programa"
                         append-icon="book"
+                        :rules="camposRules"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -97,6 +104,7 @@
                         label="Seleccione Intructor"
                         v-model="paquete.instructor"
                         append-icon="mdi-account"
+                        :rules="camposRules"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -110,6 +118,7 @@
                         label="Seleccione Día"
                         v-model="dia"
                         append-icon="mdi-calendar"
+                        :rules="camposRules"
                       ></v-select>
                     </v-col>
                     <v-col cols="6">
@@ -120,6 +129,7 @@
                         label="Seleccione Jornada"
                         v-model="jornadaInput"
                         append-icon="mdi-calendar"
+                        :rules="camposRules"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -191,6 +201,7 @@ export default {
         instructor: null,
         jornadas: [],
       },
+      camposRules: [(v) => !!v || "Campo es requerido"],
       // titulos de la primera tabla
       cabeceraTabla: [
         { text: "Día", value: "dia" },
