@@ -6,7 +6,7 @@
           <v-app-bar-nav-icon color="white"></v-app-bar-nav-icon>
 
           <v-toolbar-title class="text-h6 white--text pl-0">
-            CREAR SEDE
+            Eventos
           </v-toolbar-title>
 
           <v-spacer></v-spacer>
@@ -21,59 +21,37 @@
             <v-container>
               <v-row>
                 <v-col cols="6">
-                  <v-text-field
-                    label="Nombre de la sede"
-                    v-model="paquete.nombre"
-                    :rules="camposRules"
-                  >
-                  </v-text-field>
+                  <spam>Mes: <spam>5</spam> Mayo</spam>
                 </v-col>
                 <v-col cols="6">
-                  <v-select
-                    label="Centro"
-                    prepend-icon="map"
-                    :items="centros"
-                    item-text="nombre"
-                    v-model="paquete.centro"
-                    :rules="camposRules"
-                    item-value="_id"
-                  ></v-select>
+                  <spam>Año: <spam>2023</spam></spam>
                 </v-col>
               </v-row>
               <v-row>
-                <v-col cols="12">
-                  <v-text-field
-                    label="Lugar de funcionamiento"
-                    v-model="paquete.lugar_funcionamiento"
-                    :rules="camposRules"
-                  >
-                  </v-text-field>
+                <v-col>
+                  <span
+                    >Instructor: <input type="text" readonly class="instructor"
+                  /></span>
+                </v-col>
+                <v-col>
+                  <v-select label="Seleccione el programa"></v-select>
+                </v-col>
+              </v-row>
+              <v-row align="end">
+                <v-col cols="6">
+                  <v-row no-gutters align="center"
+                    ><label class="mb-0 mr-1">Ficha</label>
+                    <v-select class="pt-0 mt-0"></v-select
+                  ></v-row>
+                </v-col>
+                <v-col>
+                  <v-select label="Día"></v-select>
                 </v-col>
               </v-row>
               <v-row>
-                <v-col cols="6">
-                  <v-select
-                    :items="departamentos"
-                    item-text="departamento"
-                    item-value="departamento"
-                    label="Seleccione departamento"
-                    prepend-icon="map"
-                    v-model="paquete.departamento"
-                    :rules="camposRules"
-                  ></v-select>
-                </v-col>
-                <v-col cols="6">
-                  <v-select
-                    :items="ciuda"
-                    label="Seleccione una ciudad"
-                    v-model="paquete.municipio"
-                    :rules="campoRules"
-                    color="black"
-                    item-color="black"
-                    prepend-icon="map"
-                  ></v-select>
-                </v-col>
+                <v-col></v-col>
               </v-row>
+              <v-row> </v-row>
             </v-container>
           </v-form>
         </v-card-text>
@@ -85,10 +63,10 @@
       </v-card>
     </v-row>
     <pre>
-
-{{ $data }}
-
-</pre
+  
+  {{ $data }}
+  
+  </pre
     >
   </v-container>
 </template>
@@ -104,11 +82,7 @@ export default {
     return {
       centros: null, //Aquí se cargan todos los centros que están en la bd
       paquete: {
-        nombre: null,
-        centro: null,
-        lugar_funcionamiento: null,
-        departamento: null,
-        municipio: null,
+        ficha: null,
       },
       departamentos: colombia,
       camposRules: [(v) => !!v || "Campo es requerido"],
@@ -117,9 +91,8 @@ export default {
 
   methods: {
     async guardar() {
-      let url = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
       await axios
-        .post(`${url}/sedes/crear`, this.paquete)
+        .post("http://10.187.145.190:3000/sedes/crear", this.paquete)
         .then(function (response) {
           console.log(response);
         })
@@ -144,7 +117,6 @@ export default {
       return ciudades;
     },
   },
-
   async mounted() {
     const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
     const response = await axios.get(`${api}/centro/`);
@@ -155,6 +127,9 @@ export default {
 };
 </script>
 <style>
+* {
+  box-sizing: border-box;
+}
 .fondo {
   background: linear-gradient(
     90deg,
@@ -162,5 +137,14 @@ export default {
     rgba(6, 92, 23, 1) 49%,
     rgba(226, 175, 56, 1) 82%
   );
+}
+
+.numero {
+  border: 2px solid rgb(136, 136, 136);
+  padding: 2px 20px;
+}
+
+.instructor {
+  border-bottom: 2px solid rgb(136, 136, 136);
 }
 </style>

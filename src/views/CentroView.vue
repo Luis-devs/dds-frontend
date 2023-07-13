@@ -118,8 +118,9 @@ export default {
 
   methods: {
     async guardar() {
+      let url = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
       await axios
-        .post("http://10.187.145.190:3000/centro/crear", this.paquete)
+        .post(`${url}/centro/crear`, this.paquete)
         .then(function (response) {
           console.log(response);
         })
@@ -142,7 +143,7 @@ export default {
     ciuda() {
       var ciudades = null;
       for (var pos in this.departamentos) {
-        if (this.departamentos[pos].departamento == this.departamento) {
+        if (this.departamentos[pos].departamento == this.paquete.departamento) {
           ciudades = this.departamentos[pos].ciudades;
         }
       }

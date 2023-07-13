@@ -23,11 +23,11 @@
           </v-toolbar>
           <v-form ref="form">
             <v-tabs-items v-model="tab">
-              <v-tab-item>
+              <!-- <v-tab-item>
                 <v-card>
                   <h1>hola</h1>
                 </v-card>
-              </v-tab-item>
+              </v-tab-item> -->
               <v-tab-item>
                 <v-card flat>
                   <v-card-text>
@@ -236,7 +236,7 @@ export default {
   data() {
     return {
       tab: null,
-      items: ["prueba", "DATOS PERSONALES", "INFORMACION CONTRATO"],
+      items: ["DATOS PERSONALES", "INFORMACION CONTRATO"],
       fini: false,
       ffin: false,
       tipovinculacion: [],

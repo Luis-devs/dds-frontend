@@ -194,6 +194,11 @@ export default {
           },
         ],
       },
+      {
+        href: "/dashboard/crearevento",
+        title: "Evento",
+        icon: "mdi mdi-home-variant",
+      },
     ],
   }),
   mounted() {

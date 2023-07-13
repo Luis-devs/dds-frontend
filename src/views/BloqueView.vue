@@ -69,8 +69,9 @@ export default {
 
   methods: {
     async guardar() {
+      let url = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
       await axios
-        .post("http://10.187.145.190:3000/centro/crear", this.paquete)
+        .post(`${url}/bloque/crear`, this.paquete)
         .then(function (response) {
           console.log(response);
         })
@@ -83,22 +84,18 @@ export default {
         });
     },
   },
-  async mounted() {
-    const response = await axios.get("http://10.187.145.190:3000/regional");
-    this.regionales = response.data;
-  },
 
-  computed: {
-    ambient() {
-      var tipoAmb = null;
-      for (let pos in this.typeAmbiente) {
-        if (this.typeAmbiente[pos] == this.paquete.tipo) {
-          tipoAmb = this.typeAmbiente[pos].tipoAmb;
-        }
-      }
-      return tipoAmb;
-    },
-  },
+  // computed: {
+  //   ambient() {
+  //     var tipoAmb = null;
+  //     for (let pos in this.typeAmbiente) {
+  //       if (this.typeAmbiente[pos] == this.paquete.tipo) {
+  //         tipoAmb = this.typeAmbiente[pos].tipoAmb;
+  //       }
+  //     }
+  //     return tipoAmb;
+  //   },
+  // },
 };
 </script>
 

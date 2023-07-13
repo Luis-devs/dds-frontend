@@ -33,18 +33,16 @@
               </v-row>
               <v-row>
                 <v-col cols="6">
-                  <v-select
-                    :items="typeAmbiente"
-                    label="Seleccione tipo de ambiente"
-                    item-value="typeAmbiente"
-                    v-model="paquete.tipo"
+                  <v-text-field
+                    label="Codigo del ambiente"
+                    prepend-icon="mdi-key"
+                    v-model="paquete.codigo"
                     :rules="camposRules"
-                    prepend-icon="map"
-                  ></v-select>
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-select
-                    :items="sede"
+                    :items="sedes"
                     label="Selecciones una sede"
                     v-model="paquete.sede"
                     :rules="camposRules"
@@ -75,7 +73,7 @@
 <script>
 import axios from "axios";
 const tipoAmbiente = require("../json/tipoAmbiente");
-const sedes = require("../json/pruebaSedes");
+// const sedes = require("../json/pruebaSedes");
 
 export default {
   props: {
@@ -90,7 +88,7 @@ export default {
         tipo: null,
         sede: null,
       },
-      sede: sedes,
+      sedes: null,
       typeAmbiente: tipoAmbiente,
       camposRules: [(v) => !!v || "Campo es requerido"],
     };
@@ -98,8 +96,9 @@ export default {
 
   methods: {
     async guardar() {
+      let url = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
       await axios
-        .post("http://10.187.145.190:3000/centro/crear", this.paquete)
+        .post(`${url}/ambiente/crear`, this.paquete)
         .then(function (response) {
           console.log(response);
         })
@@ -112,10 +111,17 @@ export default {
         });
     },
   },
+
   async mounted() {
-    const response = await axios.get("http://10.187.145.190:3000/regional");
-    this.regionales = response.data;
+    const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
+    const response = await axios.get(`${api}/sedes/`);
+    this.sedes = response.data;
   },
+
+  // async mounted() {
+  //   const response = await axios.get("http://10.187.145.190:3000/regional");
+  //   this.regionales = response.data;
+  // },
 
   computed: {
     ambient() {

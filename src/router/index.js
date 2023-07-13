@@ -54,6 +54,12 @@ const routes = [{
                     import ('../views/BloqueView.vue')
             },
             {
+                name: 'tipoambiente',
+                path: '/dashboard/tipoAmbiente',
+                component: () =>
+                    import ('../views/TipoAmbienteView.vue')
+            },
+            {
                 name: 'crearprograma',
                 path: '/dashboard/crearprograma',
                 component: () =>
@@ -82,6 +88,12 @@ const routes = [{
                 path: '/dashboard/crearficha',
                 component: () =>
                     import ('../views/Ficha/CrearFicha.vue')
+            },
+            {
+                name: 'crearevento',
+                path: '/dashboard/crearevento',
+                component: () =>
+                    import ('../views/EventoView.vue')
             }
 
         ],
