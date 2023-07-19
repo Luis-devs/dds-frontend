@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="space-around">
-      <v-card width="600">
+      <v-card width="900">
         <v-app-bar flat color="rgb(52,188,52)">
           <v-app-bar-nav-icon color="white"></v-app-bar-nav-icon>
 
@@ -21,10 +21,10 @@
             <v-container>
               <v-row>
                 <v-col cols="6">
-                  <spam>Mes: <spam>5</spam> Mayo</spam>
+                  <spam>Mes: <spam>{{fechactual.mesNum}}</spam> {{fechactual.mes}}</spam>
                 </v-col>
                 <v-col cols="6">
-                  <spam>Año: <spam>2023</spam></spam>
+                  <spam>Año: <spam>{{fechactual.year}}</spam></spam>
                 </v-col>
               </v-row>
               <v-row>
@@ -38,14 +38,30 @@
                 </v-col>
               </v-row>
               <v-row align="end">
-                <v-col cols="6">
+                <v-col cols="2">
                   <v-row no-gutters align="center"
-                    ><label class="mb-0 mr-1">Ficha</label>
-                    <v-select class="pt-0 mt-0"></v-select
+                    >
+                    <v-select class="pt-0 mt-0"
+                    label="Ficha"></v-select
                   ></v-row>
                 </v-col>
-                <v-col>
-                  <v-select label="Día"></v-select>
+                <v-col cols="2">
+                  <v-select 
+                  v-model="dia"
+                  item-text="dia" 
+                  item-value="ndia" 
+                  :items="diasemana"
+                  label="Día">
+
+                  </v-select>
+                </v-col>
+                <v-col cols="2">
+                  <semanas
+                  :dia="dia"
+                  :mes="fechactual.mesNum"
+                  :year="fechactual.year"
+                  ></semanas>
+                
                 </v-col>
               </v-row>
               <v-row>
@@ -62,18 +78,22 @@
         </v-card-actions>
       </v-card>
     </v-row>
-    <pre>
-  
-  {{ $data }}
-  
-  </pre
-    >
+   
+      <pre>
+        {{ $data }}
+      </pre>
   </v-container>
 </template>
 <script>
 import axios from "axios";
+import semanas from "../components/semanas.vue"
 const colombia = require("../json/ciudades");
 export default {
+  components:{
+       semanas
+        },
+
+  
   props: {
     datos: Object,
     mostrar: Boolean,
@@ -81,9 +101,38 @@ export default {
   data() {
     return {
       centros: null, //Aquí se cargan todos los centros que están en la bd
+      fechactual : null,
+      dia : null,
       paquete: {
         ficha: null,
       },
+      diasemana : [
+        {
+         dia : "lunes",
+         ndia : 1
+      },
+      {
+         dia : "martes",
+         ndia : 2
+      },
+      {
+         dia : "miercoles",
+         ndia : 3
+      },
+      {
+         dia : "jueves",
+         ndia : 4
+      },
+      {
+         dia : "viernes",
+         ndia : 5
+      },
+      {
+         dia : "sabado",
+         ndia : 6
+      },
+
+    ],
       departamentos: colombia,
       camposRules: [(v) => !!v || "Campo es requerido"],
     };
@@ -119,10 +168,13 @@ export default {
   },
   async mounted() {
     const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
-    const response = await axios.get(`${api}/centro/`);
-
-    this.centros = response.data;
-    console.log(this.centros);
+    const pro = await axios.get(`${api}/programas/64b301e917de7c28dd09dbbe`);
+    console.log(pro.data)
+    const fecha = await axios.get(`${api}/date/`);
+    this.fechactual = fecha.data;
+    console.log(this.fechactual)
+ 
+   
   },
 };
 </script>

@@ -12,7 +12,15 @@ import 'vuesax/dist/vuesax.css' //Vuesax styles
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import vuescroll from "vuescroll";
 
-Vue.use(require('vue-moment'));
+import VueMoment from 'vue-moment';
+import moment from 'moment';
+
+moment.locale('es'); // Establece el idioma, en este caso, español
+moment.defaultFormat = 'DD/MM/YYYY'; // Establece el formato de fecha por defecto
+
+Vue.use(VueMoment, { moment });
+
+//Vue.use(require('vue-moment'));
 
 // You can set global config here.
 Vue.use(vuescroll, {

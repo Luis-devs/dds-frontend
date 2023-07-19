@@ -15,44 +15,70 @@
             <v-container>
               <v-row>
                 <v-col cols="6">
-                  <v-text-field
-                    label="Codigo del ambiente"
-                    prepend-icon="mdi-key"
-                    v-model="paquete.codigo"
-                    :rules="camposRules"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="6">
-                  <v-text-field
-                    label="Bloque"
-                    prepend-icon="mdi-key"
-                    v-model="paquete.bloque"
-                    :rules="camposRules"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="6">
-                  <v-text-field
-                    label="Codigo del ambiente"
-                    prepend-icon="mdi-key"
-                    v-model="paquete.codigo"
-                    :rules="camposRules"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="6">
                   <v-select
                     :items="sedes"
                     label="Selecciones una sede"
                     v-model="paquete.sede"
                     :rules="camposRules"
-                    item-value="sedes"
+                    @change="cargabloque()"
+                    item-text="nombre"
+                    item-value="_id"
                     color="black"
                     item-color="black"
                     prepend-icon="map"
                   ></v-select>
-                </v-col>
-              </v-row>
+                  </v-col>
+                  </v-row>
+
+                <v-row>
+                  <v-col cols="6">
+                    <v-select
+                    :items="bloques"
+                    label="Selecciones un bloque"
+                    v-model="paquete.bloque"
+                    :rules="camposRules"
+                    item-value="_id"
+                    item-text="nombre"
+                    color="black"
+                    item-color="black"
+                    prepend-icon="map"
+                    
+                  >
+                  <template slot="selection" slot-scope="data">
+                    {{ data.item.nombre }}-{{ data.item.nomenclatura }}
+                  </template>
+                </v-select>
+                  </v-col>
+
+                  <v-col cols="6">
+                    <v-select
+                    :items="typeAmbiente"
+                    label="Tipo de ambiente"
+                    v-model="paquete.tipo"
+                    :rules="camposRules"
+                     color="black"
+                    item-color="black"
+                    prepend-icon="map"
+                    
+                  >
+                 </v-select>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="6">
+                    <v-text-field
+                      label="Codigo"
+                      prepend-icon="mdi-key"
+                      v-model="paquete.codigo"
+                      :rules="camposRules"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+
+                
+                
+              
+              
             </v-container>
           </v-form>
         </v-card-text>
@@ -88,13 +114,23 @@ export default {
         tipo: null,
         sede: null,
       },
+
       sedes: null,
+      bloques : null,
       typeAmbiente: tipoAmbiente,
       camposRules: [(v) => !!v || "Campo es requerido"],
     };
   },
 
+ 
   methods: {
+    async cargabloque(){
+      const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
+      const response = await axios.get(`${api}/bloque/sede/${this.paquete.sede}`);
+      this.bloques = response.data
+      console.log(`data : ${response.data}`)
+    },
+
     async guardar() {
       let url = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
       await axios
@@ -115,8 +151,8 @@ export default {
   async mounted() {
     const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
     const response = await axios.get(`${api}/sedes/`);
-    this.sedes = response.data;
-  },
+      this.sedes = response.data;
+    },
 
   // async mounted() {
   //   const response = await axios.get("http://10.187.145.190:3000/regional");
@@ -124,6 +160,12 @@ export default {
   // },
 
   computed: {
+
+    combineText(item) {
+      alert(JSON.stringify(item))
+      return `${item.nombre}`;
+    },
+
     ambient() {
       var tipoAmb = null;
       for (let pos in this.typeAmbiente) {

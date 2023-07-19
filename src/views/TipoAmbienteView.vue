@@ -62,7 +62,7 @@ export default {
       paquete: {
         codigo: null,
         nombre: null,
-      },
+        },
       camposRules: [(v) => !!v || "Campo es requerido"],
     };
   },

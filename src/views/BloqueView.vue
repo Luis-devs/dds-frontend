@@ -31,6 +31,21 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
+              <v-row>
+                <v-col cols="6">
+                  <v-select
+                  :items="sedes"
+                  label="Selecciones una sede"
+                  item-text="nombre"
+                  item-value="_id"
+                  v-model="paquete.sede"
+                  :rules="camposRules"
+                  color="black"
+                  item-color="black"
+                  prepend-icon="map"
+                ></v-select>
+                </v-col>
+              </v-row>
             </v-container>
           </v-form>
         </v-card-text>
@@ -59,9 +74,11 @@ export default {
   },
   data() {
     return {
+      sedes : null,
       paquete: {
         nombre: null,
         nomenclatura: null,
+        sede : null
       },
       camposRules: [(v) => !!v || "Campo es requerido"],
     };
@@ -83,6 +100,11 @@ export default {
           // always executed
         });
     },
+  },
+  async mounted() {
+    const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
+    const response = await axios.get(`${api}/sedes/`);
+    this.sedes = response.data
   },
 
   // computed: {
