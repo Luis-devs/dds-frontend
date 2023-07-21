@@ -83,6 +83,43 @@
                             ></v-text-field>
                           </v-col>
                         </v-row>
+                        <v-row>
+                          <v-col cols="6">
+                            <v-select
+                              :items="sedes"
+                              label="Selecciones una sede"
+                              v-model="paquete.sede"
+                              :rules="camposRules"
+                              item-text="nombre"
+                              item-value="_id"
+                              color="black"
+                              item-color="black"
+                              prepend-icon="map"
+                            ></v-select>
+                            </v-col>
+                            </v-row>
+                            <v-row>
+                              <v-col cols="12">
+                                <v-select
+                                v-model="paquete.programas"
+                                :items="programas"
+                                item-value="_id"
+                                label="Asigne programas de formacion"
+                                multiple
+                               
+                              >
+                              <template v-slot:item="{ item }">
+                                {{ item.nivel }} {{ item.nombre }}
+                              </template>
+
+                              <template slot="selection" slot-scope="data">
+                                {{ data.item.nivel }} {{ data.item.nombre }}
+                              </template>
+
+                            </v-select>
+                                </v-col>
+                                </v-row>
+
                       </v-card-text>
                     </v-card>
                   </v-card-text>
@@ -182,15 +219,14 @@
                           <v-col>
                             <v-select
                               :rules="camposRules"
-                              :items="tipovinculacion"
-                              item-text="nombre"
-                              item-value="nombre"
+                              :items="tipo"
                               label="Seleccione tipo de vinculación"
                               v-model="paquete.contrato.tipoVinculacion"
                               prepend-icon="map"
                             ></v-select>
                           </v-col>
                         </v-row>
+                       
                       </v-card-text>
                     </v-card>
                   </v-col>
@@ -222,7 +258,7 @@
 <script>
 import axios from "axios";
 import mensaje from "../../components/MensajesView.vue";
-const fc = require("festivos-colombia");
+
 
 export default {
   props: {
@@ -239,13 +275,17 @@ export default {
       items: ["DATOS PERSONALES", "INFORMACION CONTRATO"],
       fini: false,
       ffin: false,
-      tipovinculacion: [],
+      tipo : ['Prestacion de servicios','Planta'],
+      sedes : null,
+      programas : null,
       paquete: {
         documento: null,
         nombre: null,
         apellido: null,
         correo: null,
         celular: null,
+        sede : null,
+        programas  : [],
         contrato: {
           numero: null,
           fechaInicio: null,
@@ -265,6 +305,9 @@ export default {
   },
 
   methods: {
+
+  
+
     async guardar() {
       var vm = this;
       if (this.$refs.form.validate()) {
@@ -291,11 +334,21 @@ export default {
   async mounted() {
     let url = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
     const tipos = await axios.get(`${url}/tipo-de-vinculacion`);
-    console.log(tipos.data);
+    const response = await axios.get(`${url}/sedes/`);
+    const programas = await axios.get(`${url}/programas/`);
+    this.programas = programas.data
+    this.sedes = response.data
     this.tipovinculacion = tipos.data;
 
-    let holidays = fc.getHolidaysByYear(2013);
-    console.log(JSON.stringify(holidays));
+    
+  },
+  computed: {
+    combinedText() {
+      return this.options.map(item => ({
+        ...item,
+        combinedText: `${item.nivel} ${item.nombre}`,
+      }));
+    },
   },
 };
 </script>

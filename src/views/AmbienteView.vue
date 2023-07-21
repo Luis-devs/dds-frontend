@@ -52,11 +52,13 @@
 
                   <v-col cols="6">
                     <v-select
-                    :items="typeAmbiente"
+                    :items="tipoambiente"
                     label="Tipo de ambiente"
                     v-model="paquete.tipo"
                     :rules="camposRules"
                      color="black"
+                    item-text="nombre"
+                    item-value="_id"
                     item-color="black"
                     prepend-icon="map"
                     
@@ -98,7 +100,7 @@
 
 <script>
 import axios from "axios";
-const tipoAmbiente = require("../json/tipoAmbiente");
+//const tipoAmbiente = require("../json/tipoAmbiente");
 // const sedes = require("../json/pruebaSedes");
 
 export default {
@@ -117,7 +119,7 @@ export default {
 
       sedes: null,
       bloques : null,
-      typeAmbiente: tipoAmbiente,
+      tipoambiente: null,
       camposRules: [(v) => !!v || "Campo es requerido"],
     };
   },
@@ -151,7 +153,10 @@ export default {
   async mounted() {
     const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
     const response = await axios.get(`${api}/sedes/`);
+    const tipambiente = await axios.get(`${api}/tipo-ambiente/`);
       this.sedes = response.data;
+      this.tipoambiente = tipambiente.data
+      console.log(this.tipoambiente)
     },
 
   // async mounted() {
