@@ -4,6 +4,15 @@
       <LogoSVG height="100px" width="100px" />
       <div style="text-align: center">
         <label class="letra" for="">EVENTOS SENA</label>
+        
+      </div>
+      <div class="centrar">
+      <v-avatar>
+        <img
+          src="../../assets/logos/sena.png"
+          alt="John"
+        >
+      </v-avatar>
       </div>
       <v-divider> </v-divider>
 
@@ -210,7 +219,7 @@ export default {
 .fon {
   /* background-image:url("../../assets/images/sidebar/abstract4.jpg");*/
   /* background-image: url("../../assets/imagen5.jpg"); */
-  background-color: #088239;
+  background-image: linear-gradient(to right top,  #a8eb12, #004d7a, #008793, #00bf72,#051937);
   background-size: 100% 100%;
   background-attachment: fixed;
   width: 100%;
@@ -220,7 +229,12 @@ export default {
 .letra {
   color: #ffffff;
   font-size: 30px;
-  font-family: "Montserrat";
+  font-family: 'Lumanosimo', cursive;
   font-weight: 400;
+}
+
+.centrar{
+  display: flex;
+  justify-content: center;
 }
 </style>

@@ -1,19 +1,12 @@
 <template>
-  <v-app-bar app elevate-on-scroll elevation="8" relative flat color="#088239">
-    <!-- <template v-slot:img="{ props }">
-        <v-img
-          v-bind="props"
-          src="../../assets/imagen8.jpg"
-
-        ></v-img>
-      </template> -->
-    <v-app-bar-nav-icon
+  <v-app-bar app elevate-on-scroll elevation="8" relative flat class="fondo">
+      <v-app-bar-nav-icon
       class="btn"
       dark
       @click="procesa()"
     ></v-app-bar-nav-icon>
 
-    <v-toolbar-title class="letra">GESTION DE EVENTOS SENA</v-toolbar-title>
+    <v-toolbar-title class="letra">GESTION DE EVENTOS</v-toolbar-title>
 
     <v-spacer></v-spacer>
 
@@ -63,7 +56,12 @@ export default {
 .letra {
   color: #ffffff;
   font-size: 50px;
-  font-family: "Montserrat";
+  font-family: 'Lumanosimo', cursive;
   font-weight: 500;
+}
+
+.fondo{
+  background-image: linear-gradient(to right top,#a8eb12, #004d7a, #008793, #00bf72, #051937 );
+  
 }
 </style>

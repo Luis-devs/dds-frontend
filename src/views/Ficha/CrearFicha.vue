@@ -19,10 +19,14 @@
                     <v-col cols="6">
                       <v-text-field
                         label="Código"
+                        color="red"
                         append-icon="mdi-key"
+                        class="text-green"
                         v-model="paquete.codigo"
                         :rules="camposRules"
-                      ></v-text-field>
+                      >
+                    
+                    </v-text-field>
                     </v-col>
                   </v-row>
 
@@ -47,7 +51,7 @@
                     ></v-text-field>
                   </v-row>
 
-                  <v-row cols="12">
+                  <v-row >
                     <v-col cols="6">
                       <v-select
                         :items="sedes"
@@ -56,32 +60,32 @@
                         label="Seleccione Sede"
                         v-model="paquete.sede"
                         append-icon="school"
+                        @change="cargarambientes()"
                         :rules="camposRules"
                       ></v-select>
                     </v-col>
                     <v-col cols="6">
                       <v-select
-                        :items="ambientesVista"
+                        :items="ambientes"
                         item-text="codigo"
                         item-value="_id"
                         label="Seleccione Ambiente"
                         v-model="paquete.ambiente"
                         append-icon="book"
                         :rules="camposRules"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
+                      >
+                      <template v-slot:item="{ item }">
+                        {{ item.bloque.nomenclatura }}-{{ item.codigo }}
+                      </template>
 
-                  <v-row>
-                    <v-col cols="6">
-                      <v-text-field
-                        label="Buscar Programa"
-                        append-icon="mdi-magnify"
-                        v-model="textoBusqueda"
-                        :rules="camposRules"
-                        @keyup="actualizarProgramas()"
-                      ></v-text-field>
+                      <template slot="selection" slot-scope="data">
+                        {{ data.item.bloque.nomenclatura }} - {{ data.item.codigo }}
+                      </template>
+                    </v-select>
                     </v-col>
+                     </v-row>  
+
+                    <v-row>
                     <v-col cols="6">
                       <v-select
                         :items="programaVista"
@@ -90,70 +94,120 @@
                         label="Seleccione Programa"
                         v-model="paquete.programa"
                         append-icon="book"
+                        @change="instrucsedeprograma()"
                         :rules="camposRules"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
+                      >
+                      <template v-slot:item="{ item }">
+                        {{ item.nivel }} - {{ item.nombre}}
+                      </template>
 
-                  <v-row>
+                      <template slot="selection" slot-scope="data">
+                        {{ data.item.nivel }} - {{ data.item.nombre }}
+                      </template>
+                    
+                    </v-select>
+                    </v-col>
+                                  
                     <v-col cols="6">
                       <v-select
                         :items="instructores"
                         item-text="nombre"
                         item-value="_id"
-                        label="Seleccione Intructor"
+                        label="Seleccione Instructor Lider de Ficha"
                         v-model="paquete.instructor"
                         append-icon="mdi-account"
                         :rules="camposRules"
                       ></v-select>
                     </v-col>
                   </v-row>
-
-                  <v-row cols="12">
-                    <v-col cols="6">
-                      <v-select
-                        :items="diasSemana"
-                        item-text="diasSemana"
-                        item-value="diasSemana"
-                        label="Seleccione Día"
-                        v-model="dia"
-                        append-icon="mdi-calendar"
-                        :rules="camposRules"
-                      ></v-select>
-                    </v-col>
-                    <v-col cols="6">
-                      <v-select
-                        :items="jornadas"
-                        item-text="descripcion"
-                        item-value="desctipcion"
-                        label="Seleccione Jornada"
-                        v-model="jornadaInput"
-                        append-icon="mdi-calendar"
-                        :rules="camposRules"
-                      ></v-select>
+                    <v-row>
+                     <v-col cols="12">
+                      <v-sheet
+                      class="d-flex"
+                      color="blue lighten-3"
+                      height="50"
+                      width="100%"
+                     >
+                     <v-row>
+                      <v-col cols="5">
+                        <v-select
+                          :items="diasSemana"
+                          item-text="diasSemana"
+                          item-value="diasSemana"
+                          label="Seleccione Día"
+                          v-model="dia"
+                          append-icon="mdi-calendar"
+                          :rules="camposRules"
+                          class="ml-5"
+                        ></v-select>
+                      </v-col>
+                      <v-col cols="5">
+                        <v-select
+                          :items="jornadas"
+                          item-text="descripcion"
+                          item-value="desctipcion"
+                          label="Seleccione Jornada"
+                          v-model="jornadaInput"
+                          append-icon="mdi-calendar"
+                          :rules="camposRules"
+                        ></v-select>
+                      </v-col>
+    
+                      <v-col cols="2">
+                        <v-btn
+                        class="mx-2 mt-2"
+                        fab
+                        dark
+                        color="green"
+                        width="40px"
+                        height="40px"
+                        @click="agregarLista"
+    
+                      >
+                        <v-icon dark>
+                          mdi-plus
+                        </v-icon>
+                      </v-btn>
+                     
+                     </v-col>
+                   </v-row>
+                  </v-sheet>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                   <v-sheet
+                   class="d-flex"
+                   
+                   height="370"
+                   width="100%"
+                  >
+                  <v-row>
+                    <v-col cols="12">
+                      <v-data-table
+                      :items="paquete.jornadas"
+                      :headers="cabeceraTabla"
+                      class="elevation-1 mx-12"
+                    ></v-data-table>
                     </v-col>
                   </v-row>
+                  
+                </v-sheet>
                 </v-col>
+                </v-row>
+
+
+              </v-col>
               </v-row>
             </v-container>
           </v-form>
         </v-card-text>
 
-        <v-card-actions class="mx-12">
-          <v-btn class="ma-2" color="secondary" @click="agregarLista">
-            Agregar
-          </v-btn>
-        </v-card-actions>
-
-        <v-data-table
-          :items="paquete.jornadas"
-          :headers="cabeceraTabla"
-          class="elevation-1 mx-12 my-6"
-        ></v-data-table>
+       
 
         <v-card-actions class="mx-12">
           <v-btn class="ma-2" color="rgb(52,188,52)" @click="guardar()">
-            Crear
+            Crear Ficha
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -172,12 +226,12 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!--
+    
     <pre>
           {{ $data }}
         </pre
     >
-    -->
+    
   </v-container>
 </template>
 
@@ -190,7 +244,9 @@ export default {
     datos: Object,
   },
   data() {
+    
     return {
+       api : `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
       paquete: {
         codigo: null,
         fechaInicio: null,
@@ -228,12 +284,24 @@ export default {
   },
 
   methods: {
+    async cargarambientes(){
+       // obtener los ambientes por sede
+    const ambientesResponse = await axios.get(`${this.api}/ambiente/sede/${this.paquete.sede}`);
+    this.ambientes = ambientesResponse.data;
+   },
+
+   async instrucsedeprograma(){
+    const instructoresResponse = await axios.get(`${this.api}/instructor/programa/${this.paquete.programa}/sede/${this.paquete.sede}`);
+    console.log(instructoresResponse.data)
+    this.instructores = instructoresResponse.data
+
+   },
     async guardar() {
       this.agregarFormatoFecha;
 
       let respuesta = null;
       await axios
-        .post("http://localhost:3000/ficha/crear", this.paquete)
+        .post(`${this.api}/ficha/crear`, this.paquete)
         .then(function (response) {
           console.log(response);
           respuesta = response;
@@ -260,6 +328,9 @@ export default {
         return;
       }
 
+      let v = this.paquete.jornadas.filter(e => e.dia == this.dia && e.jornada == this.jornadaInput)
+      if (v.length ==0)
+       {
       let indice = null;
       for (let i = 0; i < this.jornadas.length; i++) {
         if (this.jornadas[i].descripcion.includes(this.jornadaInput)) {
@@ -274,6 +345,10 @@ export default {
         horaInicio: this.jornadas[indice].horaInicio,
         horaFin: this.jornadas[indice].horaFin,
       });
+    }
+    else{
+      this.mostrarModal("Error", "Ya esta registrado un horario similar");
+    }
 
       this.dia = null;
       this.jornadaInput = null;
@@ -356,26 +431,22 @@ export default {
 
   async mounted() {
     // obtenemos las jornadas
-    const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
-    const response = await axios.get(`${api}/jornada/`);
+    
+    const response = await axios.get(`${this.api}/jornada/`);
     this.jornadas = response.data;
 
     // obtener los ambientes
-    const sedesResponse = await axios.get(`${api}/sedes/`);
+    const sedesResponse = await axios.get(`${this.api}/sedes/`);
     this.sedes = sedesResponse.data;
 
-    // obtener los ambientes
-    const ambientesResponse = await axios.get(`${api}/ambiente/`);
-    this.ambientes = ambientesResponse.data;
-
+   
     // obtener los programas
-    const programasResponse = await axios.get(`${api}/programas/`);
+    const programasResponse = await axios.get(`${this.api}/programas/`);
     this.programas = programasResponse.data;
     this.programaVista = this.programas;
 
     // obtener instructores
-    const instructoresResponse = await axios.get(`${api}/instructor/`);
-    this.instructores = instructoresResponse.data;
+    
   },
 
   computed: {
@@ -390,4 +461,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.text-green input {
+  color: red !important;
+  font-family: 'Lumanosimo', cursive;
+  font-weight: 400;
+  font-size: 22;
+
+}
+
+</style>
