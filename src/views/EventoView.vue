@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="space-around">
-      <v-card width="900">
+      <v-card width="100%">
         <v-app-bar flat color="rgb(52,188,52)">
           <v-app-bar-nav-icon color="white"></v-app-bar-nav-icon>
 
@@ -20,44 +20,108 @@
           <v-form>
             <v-container>
               <v-row>
-                <v-col cols="6">
+                <v-col cols="4">
                   <spam>Mes: <spam>{{fechactual.mesNum}}</spam> {{fechactual.mes}}</spam>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="4">
                   <spam>Año: <spam>{{fechactual.year}}</spam></spam>
                 </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
+
+                <v-col cols="4">
                   <span
                     >Instructor: <input type="text" readonly class="instructor"
                   /></span>
                 </v-col>
-                <v-col>
-                  <v-select label="Seleccione el programa"></v-select>
-                </v-col>
+
               </v-row>
+              
               <v-row align="end">
                 <v-col cols="2">
                   <v-row no-gutters align="center"
                     >
                     <v-select class="pt-0 mt-0"
-                    label="Ficha"></v-select
+                    label="Ficha"
+                    :items="fichas"
+                    item-text="codigo"
+                    item-value="_id"
+                    @change="cargadatos()"
+                    v-model="paquete.ficha"
+                    :rules="camposRules"
+                    >
+                    
+                    </v-select
                   ></v-row>
+                </v-col>
+                 <v-col cols="4">
+                  <v-text-field
+                  class="ml-2"
+                  v-model="paquete.programa"
+                  label="Programa"
+                  readonly
+                ></v-text-field>
+
+                 </v-col>
+                 <v-col cols="2">
+                  <v-text-field
+                  class="ml-2"
+                  v-model="paquete.nivel"
+                  label="Nivel"
+                  readonly
+                ></v-text-field>
+
+                 </v-col>
+                 <v-col cols="2">
+                  <v-text-field
+                  class="ml-2"
+                  v-model="paquete.municipio"
+                  label="Municipio"
+                  readonly
+                ></v-text-field>
+
+                 </v-col>
+
+                 <v-col cols="2">
+                  <v-select
+                    :items="ambientes"
+                    item-text="codigo"
+                    item-value="_id"
+                    label="Ambiente"
+                    v-model="paquete.ambiente"
+                    append-icon="book"
+                    :rules="camposRules"
+                  >
+                  <template v-slot:item="{ item }">
+                    {{ item.bloque.nomenclatura }}-{{ item.codigo }}
+                  </template>
+
+                  <template slot="selection" slot-scope="data">
+                    {{ data.item.bloque.nomenclatura }} - {{ data.item.codigo }}
+                  </template>
+                </v-select>
                 </v-col>
                 <v-col cols="2">
                   <v-select 
-                  v-model="dia"
+                  v-model="paquete.dia"
                   item-text="dia" 
                   item-value="ndia" 
                   :items="diasemana"
+                  @change="horario()"
                   label="Día">
-
                   </v-select>
                 </v-col>
-                <v-col cols="2">
+                <v-col cols="1">
+                  <v-text-field
+                  class="ml-2"
+                  v-model="paquete.horario"
+                  label="Horario"
+                  readonly
+                ></v-text-field>
+
+                 </v-col>
+
+                <v-col cols="5">
                   <semanas
-                  :dia="dia"
+                  :dia="paquete.dia"
                   :mes="fechactual.mesNum"
                   :year="fechactual.year"
                   ></semanas>
@@ -100,34 +164,44 @@ export default {
   },
   data() {
     return {
+      api : `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
       centros: null, //Aquí se cargan todos los centros que están en la bd
       fechactual : null,
+      instructor : null,
+      fichas: [],
+      ambientes : [],
       dia : null,
       paquete: {
         ficha: null,
+        programa : null,
+        nivel : null,
+        municipio : null,
+        ambiente : null,
+        dia : null,
+        horario : null
       },
       diasemana : [
         {
          dia : "lunes",
          ndia : 1
-      },
-      {
+        },
+        {
          dia : "martes",
          ndia : 2
-      },
-      {
+        },
+        {
          dia : "miercoles",
          ndia : 3
-      },
-      {
+        },
+        {
          dia : "jueves",
          ndia : 4
-      },
-      {
+        },
+        {
          dia : "viernes",
          ndia : 5
-      },
-      {
+       },
+       {
          dia : "sabado",
          ndia : 6
       },
@@ -139,6 +213,18 @@ export default {
   },
 
   methods: {
+    horario(){
+      const res = this.fichas.filter(e => e._id === this.paquete.ficha)
+      const j =  res[0].jornadas[this.paquete.dia -1];
+     this.paquete.horario = `${j.horaInicio} - ${j.horaFin}`
+    },
+    cargadatos(){
+     const res = this.fichas.filter(e => e._id === this.paquete.ficha)
+     console.log(res)
+     this.paquete.programa = res[0].programa.nombre
+     this.paquete.nivel =res[0].programa.nivel
+     this.paquete.municipio = res[0].sede.municipio
+    },
     async guardar() {
       await axios
         .post("http://10.187.145.190:3000/sedes/crear", this.paquete)
@@ -167,12 +253,27 @@ export default {
     },
   },
   async mounted() {
-    const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
-    const pro = await axios.get(`${api}/programas/64b301e917de7c28dd09dbbe`);
-    console.log(pro.data)
-    const fecha = await axios.get(`${api}/date/`);
+    let instructor = '64ba0c41420bca285a6e261a'
+       
+    
+    const fecha = await axios.get(`${this.api}/date/`);
     this.fechactual = fecha.data;
-    console.log(this.fechactual)
+    const inst = await axios.get(`${this.api}/instructor/${instructor}`);
+    this.instructor = inst.data
+    const ambientesResponse = await axios.get(`${this.api}/ambiente/sede/${this.instructor.sede}`);
+    this.ambientes = ambientesResponse.data;
+
+
+    for (let data of inst.data.programas)
+     {
+      const fichas  = await axios.get(`${this.api}/ficha/programas/${data}`);
+      console.log(fichas)
+      for (let x of fichas.data)
+       {
+          this.fichas.push(x)
+       }
+     } 
+     
  
    
   },

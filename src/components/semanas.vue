@@ -1,15 +1,21 @@
 <template>
-    <div>
-        <v-select
-        :items="diastrabajados"
-        label="Dia Inicial"
-      ></v-select>
+    <v-row>
+     <v-col cols="3">
       <v-select
+      :items="diastrabajados"
+      label="Dia Inicial"
+    ></v-select>
+     </v-col>
+    
+      <v-col cols="3">
+        <v-select
         :items="diastrabajados"
         label="Dia Final"
       ></v-select>
-        
-    </div>
+      </v-col>
+      
+    </v-row>    
+    
 </template>
 <script>
  const fc = require('festivos-colombia');
