@@ -1,19 +1,22 @@
 <template>
     <v-row>
-     <v-col cols="3">
+     <v-col cols="6">
       <v-select
       :items="diastrabajados"
+      v-model="paquete.diaIni"
       label="Dia Inicial"
+      @change="chequeo1()"
     ></v-select>
      </v-col>
     
-      <v-col cols="3">
+      <v-col cols="6">
         <v-select
         :items="diastrabajados"
         label="Dia Final"
+        v-model="paquete.diaFin"
+        @change="chequeo()"
       ></v-select>
       </v-col>
-      
     </v-row>    
     
 </template>
@@ -27,6 +30,11 @@ export default {
         festivos : [],
         festivosmes : [],
         diastrabajados : [], 
+        paquete : {
+            diaIni : null,
+            diaFin : null,
+            diastrabajados : null
+        }
     }
   },
   mounted() {
@@ -35,6 +43,23 @@ export default {
    
    },
   methods: {
+    chequeo1(){
+      this.paquete.diaFin = this.paquete.diaIni
+      this.paquete.diastrabajados = this.diastrabajados
+      this.$emit('dias',this.paquete)
+     },
+
+    chequeo(){
+      if (this.paquete.diaFin < this.paquete.diaIni)
+        {
+           alert("El dia final no puede ser menor al dia inicial")
+           this.paquete.diaFin = []
+        }
+        this.paquete.diastrabajados = this.diastrabajados
+        this.$emit('dias',this.paquete)
+        
+
+    },
      mfestivos(){
         this.festivos = []
         let holidays = fc.getHolidaysByYear(this.year);
@@ -79,6 +104,8 @@ export default {
     dia(){
         this.diasmes()
         this.filtrar()
+      
+            
        }
   },
 

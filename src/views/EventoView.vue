@@ -119,14 +119,53 @@
 
                  </v-col>
 
-                <v-col cols="5">
+                <v-col cols="3">
                   <semanas
                   :dia="paquete.dia"
                   :mes="fechactual.mesNum"
                   :year="fechactual.year"
+                  @dias="diast"
                   ></semanas>
-                
                 </v-col>
+
+                <v-col cols="3">
+                  <v-select 
+                  v-model="paquete.competencia"
+                  item-text="nombre" 
+                  item-value="nombre" 
+                  :items="competencias"
+                  @change="cargaresultados()"
+                  label="Competencias">
+                  <template v-slot:item="slotProps">
+                    {{slotProps.item.nombre}}
+                  </template>
+                  </v-select>
+                </v-col>
+                <v-col cols="3">
+                  <v-select 
+                  v-model="paquete.resultado"
+                  item-text="descripcion" 
+                  item-value="descripcion" 
+                  :items="resultados"
+                  label="Resultado aprendizaje">
+                  <template v-slot:item="slotProps">
+                    {{slotProps.item.descripcion}}
+                  </template>
+                  </v-select>
+                </v-col>
+
+
+
+                  <v-col cols="1">
+                    <v-text-field
+                     v-model="paquete.horas"
+                    label="Horas"
+                    readonly
+                  ></v-text-field>
+  
+                   </v-col>
+                
+                
               </v-row>
               <v-row>
                 <v-col></v-col>
@@ -170,7 +209,10 @@ export default {
       instructor : null,
       fichas: [],
       ambientes : [],
+      competencias : [],
+      resultados : [],
       dia : null,
+      paqdiasmes : null,
       paquete: {
         ficha: null,
         programa : null,
@@ -178,7 +220,10 @@ export default {
         municipio : null,
         ambiente : null,
         dia : null,
-        horario : null
+        horario : null,
+        horas : null,
+        competencia : null,
+        resultado : null
       },
       diasemana : [
         {
@@ -213,17 +258,34 @@ export default {
   },
 
   methods: {
+    cargaresultados()
+    {
+      let r = this.competencias.filter(e => e.nombre == this.paquete.competencia)
+      this.resultados = r[0].resultados
+    
+    },
+    diast(dias){
+      this.paqdiasmes = dias
+      let posini = this.paqdiasmes.diastrabajados.indexOf(this.paqdiasmes.diaIni)
+      let posfin = this.paqdiasmes.diastrabajados.indexOf(this.paqdiasmes.diaFin)
+      this.paquete.horas = ((posfin - posini) + 1) * 8
+    },
     horario(){
       const res = this.fichas.filter(e => e._id === this.paquete.ficha)
       const j =  res[0].jornadas[this.paquete.dia -1];
-     this.paquete.horario = `${j.horaInicio} - ${j.horaFin}`
+     this.paquete.horario = `${j.horaInicio}-${j.horaFin}`
     },
-    cargadatos(){
+    async cargadatos(){
      const res = this.fichas.filter(e => e._id === this.paquete.ficha)
      console.log(res)
      this.paquete.programa = res[0].programa.nombre
      this.paquete.nivel =res[0].programa.nivel
      this.paquete.municipio = res[0].sede.municipio
+     this.paquete.ambiente = res[0].ambiente._id
+     const competencias = await axios.get(`${this.api}/competencia/programa/${res[0].programa._id}`);
+    console.log(competencias.data)
+     this.competencias = competencias.data[0].competencias
+   
     },
     async guardar() {
       await axios
