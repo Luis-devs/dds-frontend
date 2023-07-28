@@ -94,16 +94,17 @@
                     {{ item.bloque.nomenclatura }}-{{ item.codigo }}
                   </template>
 
-                  <template slot="selection" slot-scope="data">
-                    {{ data.item.bloque.nomenclatura }} - {{ data.item.codigo }}
+                   <template slot="selection" slot-scope="data">
+                    {{data.item.bloque.nomenclatura}} - {{data.item.codigo}}
                   </template>
+                
                 </v-select>
                 </v-col>
                 <v-col cols="2">
                   <v-select 
                   v-model="paquete.dia"
                   item-text="dia" 
-                  item-value="ndia" 
+                  item-value="dia" 
                   :items="diasemana"
                   @change="horario()"
                   label="Día">
@@ -121,7 +122,7 @@
 
                 <v-col cols="3">
                   <semanas
-                  :dia="paquete.dia"
+                  :dia="diase"
                   :mes="fechactual.mesNum"
                   :year="fechactual.year"
                   @dias="diast"
@@ -153,34 +154,124 @@
                   </template>
                   </v-select>
                 </v-col>
-
-
-
                   <v-col cols="1">
                     <v-text-field
                      v-model="paquete.horas"
                     label="Horas"
                     readonly
                   ></v-text-field>
-  
-                   </v-col>
-                
-                
+                </v-col>
               </v-row>
-              <v-row>
-                <v-col></v-col>
-              </v-row>
-              <v-row> </v-row>
+             
             </v-container>
+            <v-btn class="ma-2" outlined color="indigo" @click="guardar()">
+              Crear Evento
+            </v-btn>
           </v-form>
         </v-card-text>
-        <v-card-actions>
-          <v-btn class="ma-2" outlined color="indigo" @click="guardar()">
-            Crear
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+        </v-card>
     </v-row>
+   
+    <v-row class="mt-5" justify="space-around">
+      <v-card width="100%">
+        <v-app-bar flat color="rgb(52,188,52)">
+          <v-app-bar-nav-icon color="white"></v-app-bar-nav-icon>
+
+          <v-toolbar-title class="text-h6 white--text pl-0">
+            Eventos Registrados
+          </v-toolbar-title>
+
+          <v-spacer></v-spacer>
+         </v-app-bar>
+         <v-card-text>
+          <v-form>
+            <v-container>
+              <div v-for="data in eventos" :key="data.ficha" >
+              <v-row>
+                <v-col cols="2">
+                  <v-text-field
+                  :value="data.ficha"
+                  label="Ficha"
+                  readonly
+                ></v-text-field>
+                </v-col>
+                <v-col cols="3">
+                  <v-text-field
+                  :value="data.programa"
+                  label="Programa"
+                  readonly
+                ></v-text-field>
+                </v-col>
+                <v-col cols="2">
+                  <v-text-field
+                  :value="data.nivel"
+                  label="Nivel"
+                  readonly
+                ></v-text-field>
+                </v-col>
+                <v-col cols="2">
+                  <v-text-field
+                  :value="data.municipio"
+                  label="Municipio"
+                  readonly
+                ></v-text-field>
+                </v-col>
+                <v-col cols="2">
+                  <v-text-field
+                  :value="data.ambiente"
+                  label="Ambiente"
+                  readonly
+                ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="1">
+                  <v-text-field
+                  :value="data.dia"
+                  label="Dia"
+                  readonly
+                ></v-text-field>
+                </v-col>
+                <v-col cols="2">
+                  <v-text-field
+                  :value="data.horario"
+                  label="Horario"
+                  readonly
+                ></v-text-field>
+                </v-col>
+                <v-col cols="1">
+                  <v-text-field
+                  :value="data.diacompleto"
+                  label="Laborados"
+                  readonly
+                ></v-text-field>
+                </v-col>
+                <v-col cols="4">
+                  <v-textarea
+                  :value="paquete.competencia"
+                background-color="amber lighten-4"
+                label="Competencia"
+              ></v-textarea>
+
+                </v-col>
+                <v-col cols="4">
+                  <v-textarea
+                  :value="paquete.resultado"
+                background-color="amber lighten-4"
+                color="orange orange-darken-4"
+                label="Resultado Aprendizaje"
+              ></v-textarea>
+
+                </v-col>
+                
+              </v-row>
+            </div>
+            </v-container>
+          </v-form>
+         </v-card-text>     
+        </v-card>
+       </v-row>   
+
    
       <pre>
         {{ $data }}
@@ -204,15 +295,6 @@ export default {
   data() {
     return {
       api : `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
-      centros: null, //Aquí se cargan todos los centros que están en la bd
-      fechactual : null,
-      instructor : null,
-      fichas: [],
-      ambientes : [],
-      competencias : [],
-      resultados : [],
-      dia : null,
-      paqdiasmes : null,
       paquete: {
         ficha: null,
         programa : null,
@@ -222,32 +304,47 @@ export default {
         dia : null,
         horario : null,
         horas : null,
+        diainicial : null,
+        diafinal : null,
+        diacompleto : null,
         competencia : null,
         resultado : null
       },
+      centros: null, //Aquí se cargan todos los centros que están en la bd
+
+      fechactual : null,
+      instructor : null,
+      fichas: [],
+      eventos :[],
+      ambientes : [],
+      competencias : [],
+      resultados : [],
+      dia : null,
+      paqdiasmes : null,
+      diase : null,
       diasemana : [
         {
-         dia : "lunes",
+         dia : "Lunes",
          ndia : 1
         },
         {
-         dia : "martes",
+         dia : "Martes",
          ndia : 2
         },
         {
-         dia : "miercoles",
+         dia : "Miercoles",
          ndia : 3
         },
         {
-         dia : "jueves",
+         dia : "Jueves",
          ndia : 4
         },
         {
-         dia : "viernes",
+         dia : "Viernes",
          ndia : 5
        },
        {
-         dia : "sabado",
+         dia : "Sabado",
          ndia : 6
       },
 
@@ -266,14 +363,20 @@ export default {
     },
     diast(dias){
       this.paqdiasmes = dias
+      this.paquete.diainicial = this.paqdiasmes.diaIni
+      this.paquete.diafinal = this.paqdiasmes.diaFin
+      this.paquete.diacompleto = `${this.paqdiasmes.diaIni}-${this.paqdiasmes.diaFin}` 
       let posini = this.paqdiasmes.diastrabajados.indexOf(this.paqdiasmes.diaIni)
       let posfin = this.paqdiasmes.diastrabajados.indexOf(this.paqdiasmes.diaFin)
       this.paquete.horas = ((posfin - posini) + 1) * 8
     },
     horario(){
       const res = this.fichas.filter(e => e._id === this.paquete.ficha)
-      const j =  res[0].jornadas[this.paquete.dia -1];
-     this.paquete.horario = `${j.horaInicio}-${j.horaFin}`
+      const j =  res[0].jornadas.filter(e => e.dia == this.paquete.dia);
+          //const j =  res[0].jornadas[this.paquete.dia -1];
+     this.paquete.horario = `${j[0].horaInicio}-${j[0].horaFin}`
+     let r = this.diasemana.filter(e => e.dia == this.paquete.dia)
+     this.diase = r[0].ndia
     },
     async cargadatos(){
      const res = this.fichas.filter(e => e._id === this.paquete.ficha)
@@ -282,24 +385,16 @@ export default {
      this.paquete.nivel =res[0].programa.nivel
      this.paquete.municipio = res[0].sede.municipio
      this.paquete.ambiente = res[0].ambiente._id
-     const competencias = await axios.get(`${this.api}/competencia/programa/${res[0].programa._id}`);
-    console.log(competencias.data)
-     this.competencias = competencias.data[0].competencias
+
+    const competencias = await axios.get(`${this.api}/competencia/programa/${res[0].programa._id}`);
+     console.log(competencias.data)
+    this.competencias = competencias.data[0].competencias
    
     },
     async guardar() {
-      await axios
-        .post("http://10.187.145.190:3000/sedes/crear", this.paquete)
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          // handle error
-          console.log(error);
-        })
-        .finally(function () {
-          // always executed
-        });
+       let amb = this.ambientes.filter(e => e._id == this.paquete.ambiente)
+       this.paquete.ambiente = amb[0].bloque.nomenclatura + '-' + amb[0].codigo
+       this.eventos.push(this.paquete)
     },
   },
 
@@ -324,7 +419,7 @@ export default {
     this.instructor = inst.data
     const ambientesResponse = await axios.get(`${this.api}/ambiente/sede/${this.instructor.sede}`);
     this.ambientes = ambientesResponse.data;
-
+    console.log(this.ambientes)
 
     for (let data of inst.data.programas)
      {
