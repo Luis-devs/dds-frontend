@@ -45,7 +45,7 @@
                     item-text="codigo"
                     item-value="_id"
                     @change="cargadatos()"
-                    v-model="paquete.ficha"
+                    v-model="paquete.ficha.ficha"
                     :rules="camposRules"
                     >
                     
@@ -55,7 +55,7 @@
                  <v-col cols="4">
                   <v-text-field
                   class="ml-2"
-                  v-model="paquete.programa"
+                  v-model="paquete.programa.nombre"
                   label="Programa"
                   readonly
                 ></v-text-field>
@@ -86,7 +86,7 @@
                     item-text="codigo"
                     item-value="_id"
                     label="Ambiente"
-                    v-model="paquete.ambiente"
+                    v-model="paquete.ambiente.id"
                     append-icon="book"
                     :rules="camposRules"
                   >
@@ -131,7 +131,7 @@
 
                 <v-col cols="3">
                   <v-select 
-                  v-model="paquete.competencia"
+                  v-model="paquete.competencia.competencia"
                   item-text="nombre" 
                   item-value="nombre" 
                   :items="competencias"
@@ -144,10 +144,11 @@
                 </v-col>
                 <v-col cols="3">
                   <v-select 
-                  v-model="paquete.resultado"
+                  v-model="paquete.resultado.resultado"
                   item-text="descripcion" 
                   item-value="descripcion" 
                   :items="resultados"
+                  @change="actualizaorden()"
                   label="Resultado aprendizaje">
                   <template v-slot:item="slotProps">
                     {{slotProps.item.descripcion}}
@@ -172,8 +173,9 @@
         </v-card>
     </v-row>
    
+
     <v-row class="mt-5" justify="space-around">
-      <v-card width="100%">
+      
         <v-app-bar flat color="rgb(52,188,52)">
           <v-app-bar-nav-icon color="white"></v-app-bar-nav-icon>
 
@@ -181,23 +183,28 @@
             Eventos Registrados
           </v-toolbar-title>
 
-          <v-spacer></v-spacer>
+        
          </v-app-bar>
+        
+      </v-row>
+
+      <v-row class="mb-5 mt-5" v-for="data in eventos" :key="data.ficha" >
+        <v-card width="100%">
          <v-card-text>
           <v-form>
             <v-container>
-              <div v-for="data in eventos" :key="data.ficha" >
+            
               <v-row>
                 <v-col cols="2">
                   <v-text-field
-                  :value="data.ficha"
+                  :value="data.ficha.codigo"
                   label="Ficha"
                   readonly
                 ></v-text-field>
                 </v-col>
                 <v-col cols="3">
                   <v-text-field
-                  :value="data.programa"
+                  :value="data.programa.nombre"
                   label="Programa"
                   readonly
                 ></v-text-field>
@@ -218,7 +225,7 @@
                 </v-col>
                 <v-col cols="2">
                   <v-text-field
-                  :value="data.ambiente"
+                  :value="data.ambiente.ambiente"
                   label="Ambiente"
                   readonly
                 ></v-text-field>
@@ -248,7 +255,7 @@
                 </v-col>
                 <v-col cols="4">
                   <v-textarea
-                  :value="paquete.competencia"
+                  :value="paquete.competencia.competencia"
                 background-color="amber lighten-4"
                 label="Competencia"
               ></v-textarea>
@@ -256,7 +263,7 @@
                 </v-col>
                 <v-col cols="4">
                   <v-textarea
-                  :value="paquete.resultado"
+                  :value="paquete.resultado.resultado"
                 background-color="amber lighten-4"
                 color="orange orange-darken-4"
                 label="Resultado Aprendizaje"
@@ -265,7 +272,7 @@
                 </v-col>
                 
               </v-row>
-            </div>
+            
             </v-container>
           </v-form>
          </v-card-text>     
@@ -296,19 +303,35 @@ export default {
     return {
       api : `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
       paquete: {
-        ficha: null,
-        programa : null,
+        ficha: {
+           ficha : null,
+           codigo : null,
+        }, 
+        programa : {
+           nombre : null,
+           id : null
+        },
         nivel : null,
         municipio : null,
-        ambiente : null,
+        ambiente : {
+            id : null,
+            ambiente : null,
+        },
         dia : null,
         horario : null,
+          
         horas : null,
         diainicial : null,
         diafinal : null,
         diacompleto : null,
-        competencia : null,
-        resultado : null
+        competencia : {
+          competencia : null,
+          codigo : null,
+        },
+        resultado : {
+           resultado : null,
+           orden : null,
+        } 
       },
       centros: null, //Aquí se cargan todos los centros que están en la bd
 
@@ -355,9 +378,15 @@ export default {
   },
 
   methods: {
+    actualizaorden()
+    {
+      let r = this.resultados.filter(e => e.descripcion == this.paquete.resultado.resultado)
+      this.paquete.resultado.orden = r[0].orden
+    },
     cargaresultados()
     {
-      let r = this.competencias.filter(e => e.nombre == this.paquete.competencia)
+      let r = this.competencias.filter(e => e.nombre == this.paquete.competencia.competencia)
+      this.paquete.competencia.codigo = r[0].codigo
       this.resultados = r[0].resultados
     
     },
@@ -371,20 +400,25 @@ export default {
       this.paquete.horas = ((posfin - posini) + 1) * 8
     },
     horario(){
-      const res = this.fichas.filter(e => e._id === this.paquete.ficha)
+      const res = this.fichas.filter(e => e._id === this.paquete.ficha.ficha)
       const j =  res[0].jornadas.filter(e => e.dia == this.paquete.dia);
           //const j =  res[0].jornadas[this.paquete.dia -1];
+         
      this.paquete.horario = `${j[0].horaInicio}-${j[0].horaFin}`
      let r = this.diasemana.filter(e => e.dia == this.paquete.dia)
      this.diase = r[0].ndia
     },
     async cargadatos(){
-     const res = this.fichas.filter(e => e._id === this.paquete.ficha)
-     console.log(res)
-     this.paquete.programa = res[0].programa.nombre
+     const res = this.fichas.filter(e => e._id === this.paquete.ficha.ficha)
+     this.paquete.ficha.codigo = res[0].codigo
+     this.paquete.programa.nombre = res[0].programa.nombre
+     this.paquete.programa.id = res[0].programa._id
      this.paquete.nivel =res[0].programa.nivel
      this.paquete.municipio = res[0].sede.municipio
-     this.paquete.ambiente = res[0].ambiente._id
+     this.paquete.ambiente.id = res[0].ambiente._id
+
+     let amb = this.ambientes.filter(e => e._id == this.paquete.ambiente.id)
+       this.paquete.ambiente.ambiente = amb[0].bloque.nomenclatura + '-' + amb[0].codigo
 
     const competencias = await axios.get(`${this.api}/competencia/programa/${res[0].programa._id}`);
      console.log(competencias.data)
@@ -392,9 +426,22 @@ export default {
    
     },
     async guardar() {
-       let amb = this.ambientes.filter(e => e._id == this.paquete.ambiente)
-       this.paquete.ambiente = amb[0].bloque.nomenclatura + '-' + amb[0].codigo
-       this.eventos.push(this.paquete)
+      const p = JSON.parse(JSON.stringify(this.paquete))
+      if (this.eventos.length == 0)
+       this.eventos.push(p)
+      else
+       {
+        let r = this.eventos.filter(e => (e.dia == p.dia)
+         && (e.ambiente.ambiente == p.ambiente.ambiente) 
+         && (e.horario == p.horario)
+         && ((p.diainicial >= e.diainicial) && (p.diainicial <= e.diafinal) )
+         )
+        if (r.length > 0)
+         alert('igual')
+       
+       else
+        this.eventos.push(p)
+       }
     },
   },
 
