@@ -1,7 +1,18 @@
 <template>
     <v-row>
-     <v-col cols="6">
+     <v-col cols="12">
+      
       <v-select
+            v-model="paquete.diastrabajados"
+            :items="diastrabajados"
+            @change="enviar()"
+            attach
+            chips
+            label="Dias trabajados"
+            multiple
+          ></v-select>
+
+     <!-- <v-select
       :items="diastrabajados"
       v-model="paquete.diaIni"
       label="Dia Inicial"
@@ -16,6 +27,7 @@
         v-model="paquete.diaFin"
         @change="chequeo()"
       ></v-select>
+      -->
       </v-col>
     </v-row>    
     
@@ -31,8 +43,6 @@ export default {
         festivosmes : [],
         diastrabajados : [], 
         paquete : {
-            diaIni : null,
-            diaFin : null,
             diastrabajados : null
         }
     }
@@ -43,19 +53,15 @@ export default {
    
    },
   methods: {
-    chequeo1(){
-      this.paquete.diaFin = this.paquete.diaIni
-      this.paquete.diastrabajados = this.diastrabajados
-      this.$emit('dias',this.paquete)
-     },
+   
 
-    chequeo(){
-      if (this.paquete.diaFin < this.paquete.diaIni)
+    enviar(){
+      /*if (this.paquete.diaFin < this.paquete.diaIni)
         {
            alert("El dia final no puede ser menor al dia inicial")
            this.paquete.diaFin = []
-        }
-        this.paquete.diastrabajados = this.diastrabajados
+        }*/
+       // this.paquete.diastrabajados = this.paquete.diastrabajados
         this.$emit('dias',this.paquete)
         
 

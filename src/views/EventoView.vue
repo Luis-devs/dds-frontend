@@ -188,7 +188,7 @@
         
       </v-row>
 
-      <v-row class="mb-5 mt-5" v-for="data in eventos" :key="data.ficha" >
+      <v-row class="mb-5 mt-5" v-for="data in evento.eventos" :key="data.ficha" >
         <v-card width="100%">
          <v-card-text>
           <v-form>
@@ -246,9 +246,9 @@
                   readonly
                 ></v-text-field>
                 </v-col>
-                <v-col cols="1">
+                <v-col cols="2">
                   <v-text-field
-                  :value="data.diacompleto"
+                  :value="data.diastrabajados"
                   label="Laborados"
                   readonly
                 ></v-text-field>
@@ -261,7 +261,7 @@
               ></v-textarea>
 
                 </v-col>
-                <v-col cols="4">
+                <v-col cols="3">
                   <v-textarea
                   :value="paquete.resultado.resultado"
                 background-color="amber lighten-4"
@@ -279,6 +279,13 @@
         </v-card>
        </v-row>   
 
+       <v-row>
+        <v-col>
+          <v-btn block v-if="evento.eventos.length > 0" class="ma-2" outlined color="indigo" @click="enviareventos()">
+            GUARDAR EVENTOS
+          </v-btn>
+        </v-col>
+       </v-row>
    
       <pre>
         {{ $data }}
@@ -302,6 +309,14 @@ export default {
   data() {
     return {
       api : `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
+
+      evento : {
+        mes : null,
+        year : null,
+        instructor : null,
+        eventos : []
+      },
+
       paquete: {
         ficha: {
            ficha : null,
@@ -321,9 +336,10 @@ export default {
         horario : null,
           
         horas : null,
-        diainicial : null,
-        diafinal : null,
-        diacompleto : null,
+      //  diainicial : null,
+      //  diafinal : null,
+     //   diacompleto : null,
+        diastrabajados : null,
         competencia : {
           competencia : null,
           codigo : null,
@@ -338,7 +354,6 @@ export default {
       fechactual : null,
       instructor : null,
       fichas: [],
-      eventos :[],
       ambientes : [],
       competencias : [],
       resultados : [],
@@ -378,6 +393,19 @@ export default {
   },
 
   methods: {
+   async enviareventos()
+    {
+      await axios
+        .post(`${this.api}/evento/crear`, this.evento)
+        .then(function (response) {
+          console.log(response);
+          })
+        .catch(function (error) {
+          console.log(error);
+         });
+
+      
+    },
     actualizaorden()
     {
       let r = this.resultados.filter(e => e.descripcion == this.paquete.resultado.resultado)
@@ -392,12 +420,14 @@ export default {
     },
     diast(dias){
       this.paqdiasmes = dias
-      this.paquete.diainicial = this.paqdiasmes.diaIni
-      this.paquete.diafinal = this.paqdiasmes.diaFin
-      this.paquete.diacompleto = `${this.paqdiasmes.diaIni}-${this.paqdiasmes.diaFin}` 
-      let posini = this.paqdiasmes.diastrabajados.indexOf(this.paqdiasmes.diaIni)
-      let posfin = this.paqdiasmes.diastrabajados.indexOf(this.paqdiasmes.diaFin)
-      this.paquete.horas = ((posfin - posini) + 1) * 8
+     // this.paquete.diainicial = this.paqdiasmes.diaIni
+    //  this.paquete.diafinal = this.paqdiasmes.diaFin
+      this.paquete.diastrabajados = this.paqdiasmes.diastrabajados
+    //  this.paquete.diacompleto = `${this.paqdiasmes.diaIni}-${this.paqdiasmes.diaFin}` 
+     // let posini = this.paqdiasmes.diastrabajados.indexOf(this.paqdiasmes.diaIni)
+     // let posfin = this.paqdiasmes.diastrabajados.indexOf(this.paqdiasmes.diaFin)
+     // this.paquete.horas = ((posfin - posini) + 1) * 8
+     this.paquete.horas = this.paquete.diastrabajados.length * 8
     },
     horario(){
       const res = this.fichas.filter(e => e._id === this.paquete.ficha.ficha)
@@ -427,11 +457,11 @@ export default {
     },
     async guardar() {
       const p = JSON.parse(JSON.stringify(this.paquete))
-      if (this.eventos.length == 0)
-       this.eventos.push(p)
+      if (this.evento.eventos.length == 0)
+       this.evento.eventos.push(p)
       else
        {
-        let r = this.eventos.filter(e => (e.dia == p.dia)
+        let r = this.evento.eventos.filter(e => (e.dia == p.dia)
          && (e.ambiente.ambiente == p.ambiente.ambiente) 
          && (e.horario == p.horario)
          && ((p.diainicial >= e.diainicial) && (p.diainicial <= e.diafinal) )
@@ -440,7 +470,7 @@ export default {
          alert('igual')
        
        else
-        this.eventos.push(p)
+        this.evento.eventos.push(p)
        }
     },
   },
@@ -458,10 +488,12 @@ export default {
   },
   async mounted() {
     let instructor = '64ba0c41420bca285a6e261a'
-       
-    
     const fecha = await axios.get(`${this.api}/date/`);
     this.fechactual = fecha.data;
+    this.evento.mes = this.fechactual.mesNum
+    this.evento.year = this.fechactual.year
+    this.evento.instructor = instructor
+
     const inst = await axios.get(`${this.api}/instructor/${instructor}`);
     this.instructor = inst.data
     const ambientesResponse = await axios.get(`${this.api}/ambiente/sede/${this.instructor.sede}`);
