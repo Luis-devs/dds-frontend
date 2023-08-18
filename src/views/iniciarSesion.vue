@@ -127,10 +127,10 @@ export default {
         paragraphs: [
          { text: `El software de eventos, es un software desarrollado para controlar y gestionar el resporte de horas 
          dadas por los instructores del Sena. Sus principales caracteristicas :\r`, delay: 1,marginBottom: 20},  // Primer párrafo aparece después de 1 segundo
-        { text: `* Control que nunca se sobrepasen el reporte en horas, sobre una
+        { text: `* Controla el reporte de horas sobre una
           competencia o sobre un resultado de aprenziaje.`, delay: 12000,marginBottom: 20 }, // Segundo párrafo aparece después de 2 segundos
         { text: `* Controla que todos los resultados de aprendizaje de una competencia le sean reportadas sus horas.`, delay:22000,marginBottom: 20},   // Tercer párrafo aparece después de 3 segundos
-        { text: `* Disminuy en un 99% el error humano al momento del docente diligenciar sus eventos.`, delay: 30000,marginBottom: 20}   // Tercer párrafo aparece después de 3 segundos
+        { text: `* Disminuye el error humano al momento del docente diligenciar los eventos.`, delay: 30000,marginBottom: 20}   // Tercer párrafo aparece después de 3 segundos
  
       ]
     }),

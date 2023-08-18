@@ -94,6 +94,12 @@ const routes = [{
                 path: '/dashboard/crearevento',
                 component: () =>
                     import ('../views/EventoView.vue')
+            },
+            {
+                name: 'estadistica',
+                path: '/dashboard/estadistica',
+                component: () =>
+                    import ('../views/EstadisticaFichas.vue')
             }
 
         ],

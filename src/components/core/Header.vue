@@ -55,13 +55,18 @@ export default {
 <style lang="scss" scoped>
 .letra {
   color: #ffffff;
-  font-size: 50px;
+  font-size: 30px;
   font-family: 'Lumanosimo', cursive;
   font-weight: 500;
 }
 
 .fondo{
-  background-image: linear-gradient(to right top,#a8eb12, #004d7a, #008793, #00bf72, #051937 );
-  
+  background-image: url("../../assets/6079758.jpg"); 
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  width: 100%;
+  height: 100%;
+  margin: 0;
 }
 </style>

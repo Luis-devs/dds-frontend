@@ -17,7 +17,7 @@
       <v-divider> </v-divider>
 
       <div class="app-sidebar-content">
-        <sidebar-menu showOneChild :menu="menu" />
+        <sidebar-menu  showOneChild :menu="menu"/>
       </div>
     </vuescroll>
   </v-navigation-drawer>
@@ -86,12 +86,12 @@ export default {
       {
         href: "/dashboard/regional",
         title: "Regional",
-        icon: "mdi mdi-bank",
+        icon: "fa fa-building",
       },
       {
         href: "/dashboard/centro",
         title: "Centro",
-        icon: "fa fa-chart-area",
+        icon: "mdi mdi-bank",
       },
       {
         href: "/dashboard/sede",
@@ -100,7 +100,7 @@ export default {
       },
       {
         title: "Infra-estructura",
-        icon: "mdi mdi-home-variant",
+        icon: "fa fa-cogs",
 
         child: [
           {
@@ -137,7 +137,7 @@ export default {
       },
       {
         title: "Programa",
-        icon: "mdi mdi-home-variant",
+        icon: "fa fa-life-ring",
 
         child: [
           {
@@ -186,7 +186,7 @@ export default {
       },
       {
         title: "Instructor",
-        icon: "mdi mdi-home-variant",
+        icon: "fa fa-user-secret ",
 
         child: [
           {
@@ -206,7 +206,12 @@ export default {
       {
         href: "/dashboard/crearevento",
         title: "Evento",
-        icon: "mdi mdi-home-variant",
+        icon: "mdi mdi-calendar-clock",
+      },
+      {
+        href: "/dashboard/estadistica",
+        title: "Estadisticas",
+        icon: "mdi mdi-chart-histogram",
       },
     ],
   }),
@@ -215,11 +220,11 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 .fon {
   /* background-image:url("../../assets/images/sidebar/abstract4.jpg");*/
-  /* background-image: url("../../assets/imagen5.jpg"); */
-  background-image: linear-gradient(to right top,  #a8eb12, #004d7a, #008793, #00bf72,#051937);
+  background-image: url("../../assets/6079758.jpg"); 
+  background-repeat: no-repeat;
   background-size: 100% 100%;
   background-attachment: fixed;
   width: 100%;
@@ -227,7 +232,7 @@ export default {
   margin: 0;
 }
 .letra {
-  color: #ffffff;
+  color: white;
   font-size: 30px;
   font-family: 'Lumanosimo', cursive;
   font-weight: 400;
@@ -237,4 +242,12 @@ export default {
   display: flex;
   justify-content: center;
 }
+
+.vsm-arrow {
+  color: yellow;
+  font-size: medium;
+  font-weight: 800;
+}
+
+
 </style>

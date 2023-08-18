@@ -35,11 +35,9 @@
 
               </v-row>
               
-              <v-row align="end">
+              <v-row align="end" class="row-height mb-n10" >
                 <v-col cols="2">
-                  <v-row no-gutters align="center"
-                    >
-                    <v-select class="pt-0 mt-0"
+                   <v-select class="pt-0 mt-0"
                     label="Ficha"
                     :items="fichas"
                     item-text="codigo"
@@ -50,7 +48,7 @@
                     >
                     
                     </v-select
-                  ></v-row>
+                  >
                 </v-col>
                  <v-col cols="4">
                   <v-text-field
@@ -100,6 +98,8 @@
                 
                 </v-select>
                 </v-col>
+                </v-row>
+              <v-row class="row-height mt-n8">
                 <v-col cols="2">
                   <v-select 
                   v-model="paquete.dia"
@@ -155,18 +155,27 @@
                   </template>
                   </v-select>
                 </v-col>
+              </v-row>
+
+
+                <v-row v-if="paquete.horas != null" class="row-height mt-n16">
                   <v-col cols="1">
-                    <v-text-field
-                     v-model="paquete.horas"
-                    label="Horas"
-                    readonly
-                  ></v-text-field>
+                    <span>Total horas</span>
+                    <v-chip
+                    class="ma-2"
+                    color="green"
+                    text-color="white"
+                  >
+                    {{paquete.horas}}
+                  </v-chip>
+                  
                 </v-col>
                </v-row>
              
              
             </v-container>
-            <v-btn class="ma-2" outlined color="indigo" @click="guardar()">
+          
+            <v-btn class="ma-2 mt-n16" outlined color="indigo" @click="guardar()">
               Crear Evento
             </v-btn>
           </v-form>
@@ -198,6 +207,19 @@
           </v-expansion-panel-header>
 
           <v-expansion-panel-content>
+            <LeventoView
+             :evento="evento.eventos"
+             @enviardatos="enviareventos">
+
+            </LeventoView>
+            <v-row>
+              <v-col>
+                <v-btn block  class="ma-2" outlined color="indigo"  @click="enviareventos()">
+                  GUARDAR EVENTOS
+                </v-btn>
+              </v-col>
+             </v-row>
+            <!--
       <v-row class="mb-5 mt-5" v-for="data in evento.eventos" :key="data.ficha" >
         <v-card width="100%">
          <v-card-text>
@@ -318,22 +340,44 @@
           </v-btn>
         </v-col>
        </v-row>
+       -->
       </v-expansion-panel-content>
-    </v-expansion-panel>
-       </v-expansion-panels>
+       </v-expansion-panel>
+        </v-expansion-panels>
+
       </v-row>
 
        <v-row class="mt-5" justify="space-around">
-      
-        <v-app-bar flat color="rgb(52,188,52)">
-          <v-app-bar-nav-icon color="white"></v-app-bar-nav-icon>
 
-          <v-toolbar-title class="text-h6 white--text pl-0">
-            Eventos Reportados en el MES
-          </v-toolbar-title>
+        <v-expansion-panels>
+          <v-expansion-panel>
+             <v-expansion-panel-header>
+                <v-app-bar flat color="rgb(52,188,52)">
+                   <v-app-bar-nav-icon color="white"></v-app-bar-nav-icon>
+                      <v-toolbar-title class="text-h6 white--text pl-0">
+                              Eventos Reportados en el MES
+                      </v-toolbar-title>
+                      <v-divider></v-divider>
+                      <h5 class="white--text">Total horas reportadas</h5>
+                        <v-chip
+                          class="ma-2"
+                          color="yellow"
+                          outlined
+                         >
+                        {{ totalhoras }}
+                      </v-chip>
 
-        
-         </v-app-bar>
+                </v-app-bar>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <LeventoView
+                    :evento="saveeventos"
+                 >
+                </LeventoView>
+               </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+
         
       </v-row>
 
@@ -347,10 +391,12 @@
 <script>
 import axios from "axios";
 import semanas from "../components/semanas.vue"
+import LeventoView from "../components/LeventoView.vue"
 const colombia = require("../json/ciudades");
 export default {
   components:{
-       semanas
+       semanas,
+       LeventoView
         },
 
   
@@ -362,6 +408,9 @@ export default {
     return {
       api : `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
       paqdiasmes : null,
+      totalhoras : 0,
+      saveeventos : [],
+      
       evento : {
         mes : null,
         year : null,
@@ -447,6 +496,16 @@ export default {
   },
 
   methods: {
+   async bdeventos(){
+    var wd = this
+      await axios
+        .get(`${this.api}/evento/especificos/${this.evento.mes}/${this.evento.year}/instructor/${this.evento.instructor}`)
+        .then(function (response) {
+           console.log(response.data)
+           wd.saveeventos = response.data[0].eventos
+         })
+   
+   },
    async enviareventos()
     {
       var wd = this
@@ -454,16 +513,13 @@ export default {
         .post(`${this.api}/evento/crear`, this.evento)
         .then(function (response) {
            console.log(response)
-        
-
           })
         .catch(function (error) {
           {
-                console.log(error.response)
                 wd.evento.eventos = []
                 for (let datos of error.response.data.message )
                  {
-                    let ele = datos.evento.eventos[0]
+                    let ele = datos.evento[0]
                     ele.conflict = true
                     ele.mensaje = datos.mensaje
                     wd.evento.eventos.push(JSON.parse(JSON.stringify(ele)))
@@ -571,6 +627,7 @@ export default {
     },
   },
   async mounted() {
+  
     this.limpieza = JSON.parse(JSON.stringify(this.paquete))
     let instructor = '64ba0c41420bca285a6e261a'
     const fecha = await axios.get(`${this.api}/date/`);
@@ -578,6 +635,8 @@ export default {
     this.evento.mes = this.fechactual.mesNum
     this.evento.year = this.fechactual.year
     this.evento.instructor = instructor
+
+    this.bdeventos()
 
     const inst = await axios.get(`${this.api}/instructor/${instructor}`);
     this.instructor = inst.data
@@ -594,6 +653,12 @@ export default {
           this.fichas.push(x)
        }
      } 
+ },
+ watch: {
+   saveeventos(){
+    this.totalhoras = this.saveeventos.reduce((accumulator, currentValue) => accumulator + currentValue.horas, 0);
+    
+       }
  },
 };
 </script>
@@ -617,5 +682,8 @@ export default {
 
 .instructor {
   border-bottom: 2px solid rgb(136, 136, 136);
+}
+.row-height {
+  height: 150px; /* Ajusta la altura según tus necesidades */
 }
 </style>
