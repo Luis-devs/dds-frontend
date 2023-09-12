@@ -182,6 +182,10 @@ export default {
             href: "/dashboard/crearresultadoaprendizaje",
             title: "Resultados de Aprendizaje",
           },
+          {
+            href: "/dashboard/carguemasivocompetencias",
+            title: "Cargue Masivo",
+          }
         ],
       },
       {
@@ -206,6 +210,11 @@ export default {
       {
         href: "/dashboard/crearevento",
         title: "Evento",
+        icon: "mdi mdi-calendar-clock",
+      },
+      {
+        href: "/dashboard/disponibilidad",
+        title: "Disponibilidad",
         icon: "mdi mdi-calendar-clock",
       },
       {
@@ -249,5 +258,9 @@ export default {
   font-weight: 800;
 }
 
+.v-sidebar-menu .vsm-title {
+  color:white;
+  font-weight: 800;
+}
 
 </style>

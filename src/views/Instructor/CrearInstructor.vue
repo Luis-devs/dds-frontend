@@ -109,11 +109,11 @@
                                
                               >
                               <template v-slot:item="{ item }">
-                                {{ item.nivel }} {{ item.nombre }}
+                                {{ item.nivel }} {{ item.nombre }} Intensidad Horaria {{ item.intensidad_horaria }}
                               </template>
 
                               <template slot="selection" slot-scope="data">
-                                {{ data.item.nivel }} {{ data.item.nombre }}
+                                {{ data.item.nivel }} {{ data.item.nombre }} Intensidad Horaria {{ data.item.intensidad_horaria }}
                               </template>
 
                             </v-select>

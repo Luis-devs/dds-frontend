@@ -1,11 +1,10 @@
 <template>
     <div>
-    <v-row class="mb-5 mt-5" v-for="data in this.evento" :key="data.ficha" >
+    <v-row class="mb-5 mt-5" v-for="(data,index) in this.evento" :key="data.ficha" >
         <v-card width="100%">
          <v-card-text>
           <v-form>
             <v-container>
-            
               <v-row>
                 <v-col cols="2">
                   <v-text-field
@@ -80,24 +79,21 @@
                 color="orange orange-darken-4"
                 label="Resultado Aprendizaje"
               ></v-textarea>
-
-                </v-col>
-
-                
+             </v-col>
               </v-row>
               <v-row>
                 <v-col>
                   <span>Horas evento</span>
                   <v-chip
-                          class="ma-2"
-                          color="green"
-                          outlined
+                      class="ma-2"
+                       color="green"
+                       outlined
                          >
                         {{ data.horas }}
                       </v-chip>
                 </v-col>
               </v-row>
-              <v-row v-if="data.conflict">
+              <v-row v-if="data.conflict" class="d-flex align-center">
                 <v-col cols="2">
                   <v-chip
                     class="ma-2"
@@ -107,15 +103,33 @@
                   Conflicto
                 </v-chip>
                 </v-col>
-                <v-col cols="10">
+                <v-col cols="8">
                   <v-sheet
                     color="pink"
                     elevation="1"
                     height="70"
                     width="600"
+                    class="error d-flex align-center white--text"
+                    
                   >
                    {{ data.mensaje }}
                 </v-sheet>
+                </v-col>
+                <v-col cols="2"> 
+                  <v-btn
+                  class="ma-2"
+                  color="warning"
+                  dark
+                  @click="eliminarevento(index)"
+                >
+                  Eliminar
+                  <v-icon
+                    dark
+                    right
+                  >
+                  mdi-delete
+                  </v-icon>
+                </v-btn>
                 </v-col>
 
                </v-row>
@@ -124,7 +138,8 @@
           </v-form>
          </v-card-text>     
         </v-card>
-       </v-row>   
+      
+       </v-row> 
 
       
     </div>
@@ -134,13 +149,25 @@
 <script>
 export default {
     props:['evento'],
-    
 
-   
-    
+    methods: {
+      eliminarevento(index){
+        this.$emit('eliminarevento',index)
+      }
+    },
 }
 </script>
 
 <style>
+.error{
+  border-radius: 15px;
+  padding-right: 5px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  justify-content: center;
+  text-align: center;
+  
+ 
+}
 
 </style>

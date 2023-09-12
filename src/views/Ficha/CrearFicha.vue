@@ -98,7 +98,7 @@
                         :rules="camposRules"
                       >
                       <template v-slot:item="{ item }">
-                        {{ item.nivel }} - {{ item.nombre}}
+                        {{ item.nivel }} - {{ item.nombre}} - Intensidad horaria : {{item.intensidad_horaria }}
                       </template>
 
                       <template slot="selection" slot-scope="data">

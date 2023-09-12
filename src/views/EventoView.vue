@@ -138,22 +138,33 @@
                   @change="cargaresultados()"
                   label="Competencias">
                   <template v-slot:item="slotProps">
-                    {{slotProps.item.nombre}}
+                    {{slotProps.item.duracion}}/{{slotProps.item.acumulado}} : {{slotProps.item.nombre}}
                   </template>
                   </v-select>
                 </v-col>
                 <v-col cols="3">
                   <v-select 
-                  v-model="paquete.resultado.resultado"
-                  item-text="descripcion" 
-                  item-value="descripcion" 
+                  v-model="paquete.resultado"
+                  
                   :items="resultados"
-                  @change="actualizaorden()"
+                  
+                  multiple
+                
                   label="Resultado aprendizaje">
                   <template v-slot:item="slotProps">
-                    {{slotProps.item.descripcion}}
+                    {{slotProps.item.duracion}}/{{slotProps.item.acumulado}} : {{slotProps.item.descripcion}}
+                    </template>
+
+                  <template slot="selection" slot-scope="data">
+                    <v-chip>
+                      {{data.item.descripcion}}
+                    </v-chip>
                   </template>
                   </v-select>
+                  <!-- 
+                     
+                      item-value="descripcion" 
+                    @change="actualizaorden()" -->
                 </v-col>
               </v-row>
 
@@ -175,7 +186,7 @@
              
             </v-container>
           
-            <v-btn class="ma-2 mt-n16" outlined color="indigo" @click="guardar()">
+            <v-btn class="ma-2 mt-n16" outlined color="indigo" @click="validador()">
               Crear Evento
             </v-btn>
           </v-form>
@@ -184,168 +195,37 @@
     </v-row>
    
 
-    <v-row class="mt-5" justify="space-around">
+    <v-row class="mt-5" justify="space-around" v-if="evento.eventos.length > 0">
 
       <v-expansion-panels>
         <v-expansion-panel>
-
-          <v-expansion-panel-header>
-           
-      
-              <v-app-bar flat color="rgb(52,188,52)">
+         <v-expansion-panel-header>
+             <v-app-bar flat color="rgb(52,188,52)">
                 <v-app-bar-nav-icon color="white"></v-app-bar-nav-icon>
-      
-                <v-toolbar-title class="text-h6 white--text pl-0">
+                 <v-toolbar-title class="text-h6 white--text pl-0">
                   Eventos A Reportar
                 </v-toolbar-title>
-      
-              
-               </v-app-bar>
-              
-            
-            
-          </v-expansion-panel-header>
-
-          <v-expansion-panel-content>
-            <LeventoView
-             :evento="evento.eventos"
-             @enviardatos="enviareventos">
-
-            </LeventoView>
-            <v-row>
-              <v-col>
-                <v-btn block  class="ma-2" outlined color="indigo"  @click="enviareventos()">
-                  GUARDAR EVENTOS
-                </v-btn>
-              </v-col>
-             </v-row>
-            <!--
-      <v-row class="mb-5 mt-5" v-for="data in evento.eventos" :key="data.ficha" >
-        <v-card width="100%">
-         <v-card-text>
-          <v-form>
-            <v-container>
-            
-              <v-row>
-                <v-col cols="2">
-                  <v-text-field
-                  :value="data.ficha.codigo"
-                  label="Ficha"
-                  readonly
-                ></v-text-field>
-                </v-col>
-                <v-col cols="3">
-                  <v-text-field
-                  :value="data.programa.nombre"
-                  label="Programa"
-                  readonly
-                ></v-text-field>
-                </v-col>
-                <v-col cols="2">
-                  <v-text-field
-                  :value="data.nivel"
-                  label="Nivel"
-                  readonly
-                ></v-text-field>
-                </v-col>
-                <v-col cols="2">
-                  <v-text-field
-                  :value="data.municipio"
-                  label="Municipio"
-                  readonly
-                ></v-text-field>
-                </v-col>
-                <v-col cols="2">
-                  <v-text-field
-                  :value="data.ambiente.ambiente"
-                  label="Ambiente"
-                  readonly
-                ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="1">
-                  <v-text-field
-                  :value="data.dia"
-                  label="Dia"
-                  readonly
-                ></v-text-field>
-                </v-col>
-                <v-col cols="2">
-                  <v-text-field
-                  :value="data.horario"
-                  label="Horario"
-                  readonly
-                ></v-text-field>
-                </v-col>
-                <v-col cols="2">
-                  <v-text-field
-                  :value="data.diastrabajados"
-                  label="Laborados"
-                  readonly
-                ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-textarea
-                  :value="data.competencia.competencia"
-                background-color="amber lighten-4"
-                label="Competencia"
-              ></v-textarea>
-
-                </v-col>
-                <v-col cols="3">
-                  <v-textarea
-                  :value="data.resultado.resultado"
-                background-color="amber lighten-4"
-                color="orange orange-darken-4"
-                label="Resultado Aprendizaje"
-              ></v-textarea>
-
-                </v-col>
-
-                
-              </v-row>
-              <v-row v-if="data.conflict">
-                <v-col cols="2">
-                  <v-chip
-                    class="ma-2"
-                    color="red"
-                    text-color="white"
-                  >
-                  Conflicto
-                </v-chip>
-                </v-col>
-                <v-col cols="10">
-                  <v-sheet
-                    color="pink"
-                    elevation="1"
-                    height="70"
-                    width="600"
-                  >
-                   {{ data.mensaje }}
-                </v-sheet>
-                </v-col>
-
-               </v-row>
-            
-            </v-container>
-          </v-form>
-         </v-card-text>     
-        </v-card>
-       </v-row>   
-       <v-row>
-        <v-col>
-          <v-btn block v-if="evento.eventos.length > 0" class="ma-2" outlined color="indigo" @click="enviareventos()">
-            GUARDAR EVENTOS
-          </v-btn>
-        </v-col>
+                  </v-app-bar>
+                  </v-expansion-panel-header>
+                   <v-expansion-panel-content>
+                      <LeventoView
+                          :evento="evento.eventos"
+                           @enviardatos="enviareventos"
+                           @eliminarevento="eliminarevento"
+                           
+                           >
+                      </LeventoView>
+                      <v-row>
+                        <v-col>
+                          <v-btn block  class="ma-2" outlined color="indigo"  @click="enviareventos()">
+                            GUARDAR EVENTOS
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                   </v-expansion-panel-content>
+                 </v-expansion-panel>
+                </v-expansion-panels>
        </v-row>
-       -->
-      </v-expansion-panel-content>
-       </v-expansion-panel>
-        </v-expansion-panels>
-
-      </v-row>
 
        <v-row class="mt-5" justify="space-around">
 
@@ -374,18 +254,34 @@
                     :evento="saveeventos"
                  >
                 </LeventoView>
+              
                </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
 
         
       </v-row>
-
+      <v-snackbar
+        v-model="snackbar"
+         >
+           {{ text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="red"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
       
-   
+   <!--
       <pre>
         {{ $data }}
       </pre>
+    -->
   </v-container>
 </template>
 <script>
@@ -406,6 +302,9 @@ export default {
   },
   data() {
     return {
+      snackbar : false,
+      text : '',
+      horajornada : 0,
       api : `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
       paqdiasmes : null,
       totalhoras : 0,
@@ -419,7 +318,7 @@ export default {
       },
 
       limpieza : null,
-      paquete: {
+   paquete: {
         ficha: {
            ficha : null,
            codigo : null,
@@ -438,18 +337,16 @@ export default {
         horario : null,
           
         horas : null,
-      //  diainicial : null,
-      //  diafinal : null,
-     //   diacompleto : null,
         diastrabajados : null,
         competencia : {
           competencia : null,
           codigo : null,
         },
-        resultado : {
+        resultado : []
+        /* {
            resultado : null,
            orden : null,
-        } ,
+        } */,
         conflict : false
       },
       centros: null, //Aquí se cargan todos los centros que están en la bd
@@ -490,20 +387,34 @@ export default {
       },
 
     ],
+      error : null,
       departamentos: colombia,
       camposRules: [(v) => !!v || "Campo es requerido"],
     };
   },
 
   methods: {
+    eliminarevento(pos)
+    {
+      this.evento.eventos.splice(pos,1)
+    },
+
    async bdeventos(){
-    var wd = this
+   
+      var wd = this
       await axios
-        .get(`${this.api}/evento/especificos/${this.evento.mes}/${this.evento.year}/instructor/${this.evento.instructor}`)
-        .then(function (response) {
-           console.log(response.data)
-           wd.saveeventos = response.data[0].eventos
-         })
+      .get(`${this.api}/evento/especificos/${this.evento.mes}/${this.evento.year}/instructor/${this.evento.instructor}`)
+      .then(function (response) {
+          console.log(response)
+          wd.saveeventos = response.data[0].eventos
+       })
+   
+      .catch(error => {
+          {
+           console.log(error.response)
+         
+          }
+        })
    
    },
    async enviareventos()
@@ -511,21 +422,22 @@ export default {
       var wd = this
       await axios
         .post(`${this.api}/evento/crear`, this.evento)
-        .then(function (response) {
-           console.log(response)
+        .then(function () {
+         wd.evento.eventos = []
           })
         .catch(function (error) {
           {
+           
                 wd.evento.eventos = []
-                for (let datos of error.response.data.message )
+                for (let datos of error.response.data.message)
                  {
-                    let ele = datos.evento[0]
+                    let ele = datos.evento
                     ele.conflict = true
                     ele.mensaje = datos.mensaje
                     wd.evento.eventos.push(JSON.parse(JSON.stringify(ele)))
                  }
-           
-              }
+            }
+          
           
          });
 
@@ -546,13 +458,14 @@ export default {
     diast(dias){
       this.paqdiasmes = dias
       this.paquete.diastrabajados = this.paqdiasmes.diastrabajados
-      this.paquete.horas = this.paquete.diastrabajados.length * 8
+      this.paquete.horas = this.paquete.diastrabajados.length * this.horajornada
     },
 
     horario(){
       const res = this.fichas.filter(e => e._id === this.paquete.ficha.ficha)
       const j =  res[0].jornadas.filter(e => e.dia == this.paquete.dia);
       this.paquete.horario = `${j[0].horaInicio}-${j[0].horaFin}`
+      this.horajornada = (parseInt(j[0].horaFin) - parseInt(j[0].horaInicio)) + 2
       let r = this.diasemana.filter(e => e.dia == this.paquete.dia)
       this.diase = r[0].ndia
       this.paqdiasmes.diastrabajados = []
@@ -571,18 +484,125 @@ export default {
      let amb = this.ambientes.filter(e => e._id == this.paquete.ambiente.id)
        this.paquete.ambiente.ambiente = amb[0].bloque.nomenclatura + '-' + amb[0].codigo
 
-    const competencias = await axios.get(`${this.api}/competencia/programa/${res[0].programa._id}`);
-     console.log(competencias.data)
-    this.competencias = competencias.data[0].competencias
+       const competenciasgestor = await axios.get(`${this.api}/gestor-t/${this.paquete.ficha.ficha}/`);
+     console.log(competenciasgestor.data)
+     this.competencias = competenciasgestor.data[0].competencias
+
+    //const competencias = await axios.get(`${this.api}/competencia/programa/${res[0].programa._id}`);
+   //  console.log(competencias.data)
+    //this.competencias = competencias.data[0].competencias
    
     },
 
-    guardar() {
-      const p = JSON.parse(JSON.stringify(this.paquete))
+    validador(){
+     let total = this.paquete.resultado.reduce((accumulator, resultado) =>
+          accumulator + (resultado.duracion - resultado.acumulado), 0);
+    if (this.paquete.diastrabajados.length < this.paquete.resultado.length )
+     {
+          this.snackbar = true,
+          this.text = `El numero de dias trabajados no es suficiente para el numero de
+                        resultados de aprenizajes a reportar`
+          return false
+     }
+     else 
+     {
+      if (total < this.paquete.horas)
+      {
+          this.snackbar = true,
+          this.text = `El numero de horas trabajadas supera al numero de horas del
+          resultado de aprendizaje`
+          return false
+      }
+      else{
+        if (this.paquete.resultado.length > 1)
+        {
+          let acumulado = this.paquete.horas
+          let diast = this.paquete.diastrabajados
+          let newpaquete = JSON.parse(JSON.stringify(this.paquete))
+          let ele = 0
+          let presul = 0
+          
+            for(let eresultado of this.paquete.resultado)
+             {
+              let diastomar = 1
+              
+              if (acumulado > 0)
+              {
+                let horasf =  eresultado.duracion - eresultado.acumulado
+                if ((horasf >= this.horajornada) && (acumulado > this.horajornada))
+                 {
+                                  diastomar = Math.trunc(horasf / this.horajornada)
+                                  newpaquete.horas = (this.horajornada * diastomar)
+                                  acumulado -= this.horajornada * diastomar
+
+                 }
+               else{
+                 
+                  if (horasf > acumulado)
+                  {
+                  newpaquete.horas = acumulado
+                  acumulado -= acumulado
+                  }
+                  else
+                  {
+                    newpaquete.horas = horasf
+                  acumulado -= horasf
+
+                  }
+                  
+                  
+               }
+
+                  
+               
+                  newpaquete.diastrabajados = []
+                    for(let x=1;x<=diastomar;x++){
+                    newpaquete.diastrabajados.push(diast[ele])
+                    ele +=1
+                    }
+                
+                    const { descripcion,orden } = this.paquete.resultado[presul]
+                    var obj = new Object()
+                    obj.resultado = descripcion
+                    obj.orden = orden
+                    console.log(obj)
+
+              //    newpaquete.resultado = this.paquete.resultado[presul]
+              newpaquete.resultado = obj
+                  // a is constant
+                
+                   this.guardar(newpaquete)
+                 }
+
+                presul += 1
+               
+            }
+            this.paquete = JSON.parse(JSON.stringify(this.limpieza)) 
+        }
+        else
+        {
+          const { descripcion,orden } = this.paquete.resultado[0]
+          var obje = new Object()
+          obje.resultado = descripcion
+          obje.orden = orden
+          this.paquete.resultado = obje
+          this.guardar(this.paquete)
+          this.paquete = JSON.parse(JSON.stringify(this.limpieza))
+
+        }
+      }
+    }
+
+    },
+
+    guardar(paquete) {
+      //const p = JSON.parse(JSON.stringify(this.paquete))
+      const p = JSON.parse(JSON.stringify(paquete))
+      
       if (this.evento.eventos.length == 0)
        {
        this.evento.eventos.push(p)
-       this.paquete = JSON.parse(JSON.stringify(this.limpieza))
+      // this.paquete = JSON.parse(JSON.stringify(this.limpieza))
        this.diase = null
        this.paqdiasmes.diastrabajados = []
        }
@@ -591,7 +611,6 @@ export default {
         var  comun = []
         for (let data of this.evento.eventos)
         {
-          console.log(data)
           comun =   data.diastrabajados.filter(elemento => p.diastrabajados.includes(elemento));
           if (comun > 0)
            break;
@@ -608,11 +627,12 @@ export default {
        else
         {
         this.evento.eventos.push(p)
-        this.paquete = JSON.parse(JSON.stringify(this.limpieza))
+      //  this.paquete = JSON.parse(JSON.stringify(this.limpieza))
         this.paqdiasmes.diastrabajados = []
         }
        }
-    },
+    
+   }
   },
 
   computed: {
@@ -629,7 +649,7 @@ export default {
   async mounted() {
   
     this.limpieza = JSON.parse(JSON.stringify(this.paquete))
-    let instructor = '64ba0c41420bca285a6e261a'
+    let instructor = '64ff808815f852cb3ee45e4b'
     const fecha = await axios.get(`${this.api}/date/`);
     this.fechactual = fecha.data;
     this.evento.mes = this.fechactual.mesNum

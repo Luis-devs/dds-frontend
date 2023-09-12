@@ -76,6 +76,18 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
+              <v-row>
+                <v-col cols="6">
+                  <v-select
+                  :items="inthoraria"
+                  label="Intensidad horaria"
+                  prepend-icon="map"
+                  v-model="paquete.intensidad_horaria"
+                  :rules="camposRules"
+                ></v-select>
+
+                </v-col>
+              </v-row>
             </v-container>
           </v-form>
         </v-card-text>
@@ -86,6 +98,9 @@
         </v-card-actions>
       </v-card>
     </v-row>
+    <pre>
+      {{ $data }}
+    </pre>
     <mensaje :mensaje="mensaje" :color="color" :show="show"> </mensaje>
   </v-container>
 </template>
@@ -104,12 +119,14 @@ export default {
 
   data() {
     return {
+      inthoraria : [8,6],
       paquete: {
         codigo: null,
         nombre: null,
         version: null,
         duracion: null,
         nivel: null,
+        intensidad_horaria : null
       },
       mensaje: "",
       color: "",

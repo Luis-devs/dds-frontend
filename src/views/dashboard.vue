@@ -36,7 +36,7 @@ export default {
 <style>
 #inspire {
   /* background-image: url("../assets/fondo.png"); */
-  background-color: #d0d7de;
+  background-color: white;
   background-size: 100% 100%;
   background-attachment: fixed;
   margin: 0;

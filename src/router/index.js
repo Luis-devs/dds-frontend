@@ -78,6 +78,12 @@ const routes = [{
                     import ('../views/ResultadosAprendizaje/CrearResultadosAprendizaje.vue')
             },
             {
+                name: 'carguemasivocompetencias',
+                path: '/dashboard/carguemasivocompetencias',
+                component: () =>
+                    import ('../views/Competencia/CargueMasivoCompetencias.vue')
+            },
+            {
                 name: 'crearinstructor',
                 path: '/dashboard/crearinstructor',
                 component: () =>
@@ -100,6 +106,12 @@ const routes = [{
                 path: '/dashboard/estadistica',
                 component: () =>
                     import ('../views/EstadisticaFichas.vue')
+            },
+            {
+                name: 'disponibilidad',
+                path: '/dashboard/disponibilidad',
+                component: () =>
+                    import ('../views/DisponibilidadView.vue')
             }
 
         ],
