@@ -6,7 +6,7 @@
       @click="procesa()"
     ></v-app-bar-nav-icon>
 
-    <v-toolbar-title class="letra">GESTION DE EVENTOS</v-toolbar-title>
+    <v-toolbar-title class="letra">GESTION DE EVENTOS </v-toolbar-title>
 
     <v-spacer></v-spacer>
 
@@ -25,7 +25,7 @@
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="item.text"></v-list-item-title>
+              <v-list-item-title @click="procesar(i)" v-text="item.text"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
@@ -44,11 +44,23 @@ export default {
       ],
     };
   },
+  computed: {
+    usuario(){
+        return this.$store.getters.usuario.name
+    }
+  },
   methods: {
     procesa() {
       console.log("generado");
       this.$emit("handrawer");
     },
+    procesar(pos){
+      if (pos == 1)
+      {
+        this.$store.commit('setusuario', null)
+        this.$router.push('/');
+      }
+    }
   },
 };
 </script>

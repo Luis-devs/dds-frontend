@@ -1,5 +1,7 @@
 <template>
-  <v-navigation-drawer v-model="drawer" app class="fon" width="320px">
+  <v-navigation-drawer v-model="drawer" 
+  color="white"
+  app class="fon" width="320px">
     <vuescroll :ops="ops">
       <LogoSVG height="100px" width="100px" />
       <div style="text-align: center">
@@ -7,12 +9,13 @@
         
       </div>
       <div class="centrar">
-      <v-avatar>
+      
         <img
-          src="../../assets/logos/sena.png"
-          alt="John"
+          src="../../assets/logos/Diseno.png"
+          alt="Evento"
+          width="100px"
         >
-      </v-avatar>
+      
       </div>
       <v-divider> </v-divider>
 
@@ -24,6 +27,8 @@
 </template>
 
 <script>
+const menut = require("../../json/menu");
+
 import { SidebarMenu } from "vue-sidebar-menu";
 import vuescroll from "vuescroll";
 import LogoSVG from "@/assets/logos/DisenoAnimado.svg";
@@ -77,7 +82,8 @@ export default {
       ["mdi-alert-octagon", "Spam"],
     ],
 
-    menu: [
+    menu : [],
+   /* menu: [
       {
         header: true,
         title: "MENU EVENTOS",
@@ -222,28 +228,45 @@ export default {
         title: "Estadisticas",
         icon: "mdi mdi-chart-histogram",
       },
-    ],
+    ],*/
   }),
   mounted() {
-    this.menu = this.$store.state.userData.menu;
-  },
+    let rol = this.$store.getters.usuario.roles
+    console.log(`Roles ${JSON.stringify(rol)}`)
+    const found = rol.find((element) => element == 'Administrator');
+    if (found != undefined)
+      {
+      this.menu = menut[0].admin
+      }
+    else
+    {
+      const inst = rol.find((element) => element == 'Instructor');
+      if (inst != undefined)
+         this.menu = menut[1].instructor
+    }
+
+    }
+   
+  
 };
 </script>
 <style>
 .fon {
   /* background-image:url("../../assets/images/sidebar/abstract4.jpg");*/
-  background-image: url("../../assets/6079758.jpg"); 
+  /*background-image: url("../../assets/6079758.jpg"); 
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  background-attachment: fixed;
+  background-attachment: fixed;*/
+  background-color:white;
+  color:black;
   width: 100%;
   height: 100%;
   margin: 0;
 }
 .letra {
-  color: white;
-  font-size: 30px;
-  font-family: 'Lumanosimo', cursive;
+  color: black;
+  font-size: 40px;
+  font-family:'Courier New', Courier, monospace;
   font-weight: 400;
 }
 
@@ -253,14 +276,39 @@ export default {
 }
 
 .vsm-arrow {
-  color: yellow;
-  font-size: medium;
+  color: rgb(125, 234, 132);
+  font-size: 14px;
   font-weight: 800;
 }
 
 .v-sidebar-menu .vsm-title {
-  color:white;
+  color:black;
   font-weight: 800;
+  font-size: 15px;
+  font-family:'Courier New', Courier, monospace;
 }
+
+.vsm-icon{
+  float:right;
+  
+
+  border-radius: 50%;
+  
+   
+}
+
+.v-sidebar-menu .vsm-icon {
+  color : black;
+
+  margin-left:-10px;
+  width:  36px;
+  height: 36px;
+}
+
+.v-sidebar-menu .vsm-header {
+  color : black;
+  font-size: 20px;
+}
+
 
 </style>

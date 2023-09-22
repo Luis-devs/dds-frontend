@@ -9,18 +9,22 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-     
-
-    },
+        usuario : null,
+          },
     mutations: {
-      
-
-
+        setusuario (state, data) {
+            state.usuario = data
+          }
     },
 
-    getters: {
-       
+     getters: {
+        usuario (state) {
+            return state.usuario
+          },
+
+         
     },
+    
     actions: {
 
     },

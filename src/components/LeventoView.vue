@@ -82,7 +82,8 @@
              </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col
+                 cols="2">
                   <span>Horas evento</span>
                   <v-chip
                       class="ma-2"
@@ -91,6 +92,17 @@
                          >
                         {{ data.horas }}
                       </v-chip>
+                </v-col>
+                <v-col v-if="tipo==2">
+                  <v-btn
+                  class="ma-2"
+                  outlined
+                  color="red"
+                  @click="eliminar(index)"
+                >
+                <v-icon>mdi-eraser</v-icon>
+                Eliminar
+                </v-btn>
                 </v-col>
               </v-row>
               <v-row v-if="data.conflict" class="d-flex align-center">
@@ -148,11 +160,14 @@
 
 <script>
 export default {
-    props:['evento'],
+    props:['evento','tipo'],
 
     methods: {
       eliminarevento(index){
         this.$emit('eliminarevento',index)
+      },
+      eliminar(index){
+        this.$emit('eliminareventobd',index)
       }
     },
 }

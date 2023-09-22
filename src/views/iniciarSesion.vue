@@ -24,13 +24,13 @@
                     <div class="input-group-append">
                       <span class="input-group-text"><i class="fas fa-user"></i></span>
                     </div>
-                    <input v-model="usuario" type="text" name="" class="form-control input_user" placeholder="Username">
+                    <input v-model="users.correo" type="text" name="" class="form-control input_user" placeholder="Username">
                   </div>
                   <div class="input-group mb-2">
                     <div class="input-group-append">
                       <span class="input-group-text"><i class="fas fa-key"></i></span>
                     </div>
-                    <input v-model="contrasena" type="password" name="" class="form-control input_pass" placeholder="Password">
+                    <input v-model="users.password" type="password" name="" class="form-control input_pass" placeholder="Password">
                   </div>
                     <div class="d-flex justify-content-center mt-3 login_container" v-if="prueba==0">
                  <vs-button dark  class="btn login_btn" @click="login">Iniciar Sesión</vs-button>
@@ -39,7 +39,9 @@
                   <vs-button class="btn login_btn"  loading  dark  >
                     Iniciar Sesión
                   </vs-button>
+
                 </div>
+
                  <v-snackbar
               v-model="isBusy"
               :timeout="2000"
@@ -99,25 +101,30 @@
             </template>
            </v-col>
          </v-row>       
-
-    
+ 
     </v-main>
   </v-app>
 
      
 </template>
 <script>
-
+import axios from "axios";
 
 export default {
     name: 'App',
     data: () => ({
+        api : `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
         entorno: process.env,
         active: 'home',
         dialog: false,
-        usuario: "",
+
+        users : {
+          correo: null,
+          password: null
+        },
+       
         noti: null,
-        contrasena: "",
+        
         error: false,
         msg: "",
         isBusy: false,
@@ -125,13 +132,15 @@ export default {
         array: [],
         rolMenu: [],
         paragraphs: [
-         { text: `El software de eventos, es un software desarrollado para controlar y gestionar el resporte de horas 
+         { text: `El software de eventos, es un software desarrollado para el control y la gestión del resporte de horas 
          dadas por los instructores del Sena. Sus principales caracteristicas :\r`, delay: 1,marginBottom: 20},  // Primer párrafo aparece después de 1 segundo
-        { text: `* Controla el reporte de horas sobre una
+        { text: `* Controlar el reporte de horas sobre una
           competencia o sobre un resultado de aprenziaje.`, delay: 12000,marginBottom: 20 }, // Segundo párrafo aparece después de 2 segundos
-        { text: `* Controla que todos los resultados de aprendizaje de una competencia le sean reportadas sus horas.`, delay:22000,marginBottom: 20},   // Tercer párrafo aparece después de 3 segundos
-        { text: `* Disminuye el error humano al momento del docente diligenciar los eventos.`, delay: 30000,marginBottom: 20}   // Tercer párrafo aparece después de 3 segundos
- 
+        { text: `* Gestionar que todos los resultados de aprendizaje de una competencia le sean reportadas sus horas.`, delay:22000,marginBottom: 20},   // Tercer párrafo aparece después de 3 segundos
+        { text: `* Disminuye el error humano al momento de diligenciar los eventos.`, delay: 30000,marginBottom: 20}, 
+        { text: `* Monitorear el avance de las fichas de formación.`, delay: 35000,marginBottom: 20},  // Tercer párrafo aparece después de 3 segundos
+        { text: `* Administrar la disponibilidad de los ambientes de las sedes.`, delay: 40000,marginBottom: 20},
+        { text: `* Disponibilidad de los horarios de los instructores.`, delay: 45000,marginBottom: 20}  
       ]
     }),
 
@@ -167,9 +176,37 @@ paragraphs.forEach((paragraph, index) => {
 },
 
 
-        login() {
-            this.$router.push('dashboard/welcome');
+       async login() {
+       
+
+
+          let vm = this
+           await axios
+              .post(`${this.api}/auth/login`,this.users)
+              .then(function (response) {
+                console.log(response)
+                 if (response.status == 200)
+                 {
+                     vm.$store.commit('setusuario', response.data)
+                     vm.$router.push('dashboard/welcome');
+                    }
+          
+               })
+               .catch(function () {
+                 {
+                      vm.msg = 'Usuario / contraseña Invalidos'
+                      vm.isBusy = true
+               
+            }
+          
+          
+         });
+       
+
+          
+
         }
+        
     },
 
       }

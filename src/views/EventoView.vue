@@ -252,6 +252,8 @@
               <v-expansion-panel-content>
                 <LeventoView
                     :evento="saveeventos"
+                    tipo="2"
+                    @eliminareventobd="eliminareventobd"
                  >
                 </LeventoView>
               
@@ -394,6 +396,24 @@ export default {
   },
 
   methods: {
+    async eliminareventobd(pos){
+      const paq = {
+          instructor : "64ff808815f852cb3ee45e4b",
+          evento : this.saveeventos[pos],
+          eventIndex : pos
+      }
+         await axios
+        .post(`${this.api}/evento/eliminar/especifico`,paq)
+        .then(function (response) {
+             console.log(response)
+          
+          })
+       
+
+
+
+    },
+
     eliminarevento(pos)
     {
       this.evento.eventos.splice(pos,1)

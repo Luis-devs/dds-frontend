@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
+import store from '../store';
 
 
 Vue.use(VueRouter)
@@ -23,6 +23,8 @@ const routes = [{
                 component: () =>
                     import ('../views/welcome.vue'),
             },
+
+
             {
                 name: 'regional',
                 path: '/dashboard/regional',
@@ -112,9 +114,27 @@ const routes = [{
                 path: '/dashboard/disponibilidad',
                 component: () =>
                     import ('../views/DisponibilidadView.vue')
-            }
+            },
+            {
+                name: 'crearusuario',
+                path: '/dashboard/crearusuario',
+                component: () =>
+                    import ('../views/Usuario/CrearUsuarioView.vue')
+            },
+            {
+                name: 'listarusuario',
+                path: '/dashboard/listarusuario',
+                component: () =>
+                    import ('../views/Usuario/ListarUsuarioView.vue')
+            },
+
 
         ],
+        beforeEnter: (_, __, next) => {
+            const fs =  store.getters.usuario
+            if (!fs) return next('/')
+            next()
+          }
     },
 
 

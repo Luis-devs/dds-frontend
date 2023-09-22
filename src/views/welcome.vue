@@ -77,7 +77,6 @@
           <v-calendar
             ref="calendar"
             v-model="focus"
-          
             :value="today"
             :events="eventcalendar"
             :type="type"
@@ -129,6 +128,7 @@ export default {
         const ffin =   `${dia} ${parseInt(horario[1])}:00:00`
         console.log(starti,ffin)
         this.eventcalendar.push({
+            name :`Ficha : ${even.ficha.codigo} : ${even.ambiente.ambiente}`,
             start: starti,
             end: ffin,
             color :'blue'
@@ -158,6 +158,12 @@ export default {
 </script>
 
 <style scoped>
+
+.vcal-event-name {
+  white-space: normal; /* Allow text to wrap within the event name */
+  overflow-wrap: break-word;
+}
+
 .row {
   align-items: center;
   justify-content: center;
