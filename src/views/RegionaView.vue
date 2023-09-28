@@ -117,8 +117,7 @@ export default {
         nombre: null,
         departamento: null,
         municipio: null,
-        editar: "Editar",
-      },
+        },
       cabeceraTabla: [
         { text: "Codigo", value: "codigo" },
         { text: "Nombre", value: "nombre" },

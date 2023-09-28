@@ -104,13 +104,11 @@ import axios from "axios";
 // const sedes = require("../json/pruebaSedes");
 
 export default {
-  props: {
-    datos: Object,
-    mostrar: Boolean,
-  },
+ 
   data() {
     return {
-      paquete: {
+       api : `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
+        paquete: {
         codigo: null,
         bloque: null,
         tipo: null,
@@ -127,16 +125,14 @@ export default {
  
   methods: {
     async cargabloque(){
-      const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
-      const response = await axios.get(`${api}/bloque/sede/${this.paquete.sede}`);
+      const response = await axios.get(`${this.api}/bloque/sede/${this.paquete.sede}`);
       this.bloques = response.data
       console.log(`data : ${response.data}`)
     },
 
     async guardar() {
-      let url = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
-      await axios
-        .post(`${url}/ambiente/crear`, this.paquete)
+        await axios
+        .post(`${this.api}/ambiente/crear`, this.paquete)
         .then(function (response) {
           console.log(response);
         })
@@ -151,12 +147,14 @@ export default {
   },
 
   async mounted() {
-    const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
-    const response = await axios.get(`${api}/sedes/`);
-    const tipambiente = await axios.get(`${api}/tipo-ambiente/`);
+    this.paquete.centro = this.$store.getters.usuario.centro
+    const response = await axios.get(`${this.api}/sedes/centro/${this.paquete.centro}`);
+   
+    //const response = await axios.get(`${this.api}/sedes/`);
+    const tipambiente = await axios.get(`${this.api}/tipo-ambiente/`);
       this.sedes = response.data;
       this.tipoambiente = tipambiente.data
-      console.log(this.tipoambiente)
+     
     },
 
   // async mounted() {

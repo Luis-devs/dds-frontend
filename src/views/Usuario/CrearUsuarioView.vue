@@ -359,7 +359,7 @@ export default {
       fini: false,
       ffin: false,
       tipo : ['Prestacion de servicios','Planta'],
-      sedes : [],
+      centros : [],
       isInstructor : false,
       isAdmin : false,
       programas : null,
@@ -370,7 +370,7 @@ export default {
         correo: null,
         password: null,
         celular: null,
-        sede : null,
+        centro : null,
         programas  : [],
         roles : [],
         contrato: {
@@ -405,7 +405,7 @@ export default {
        {
          this.paquete.roles = []
          this.paquete.roles.push("Administrator")
-         this.items =  ["DATOS PERSONALES", "INFORMACION CONTRATO","ROLES","SEDES"]
+         this.items =  ["DATOS PERSONALES", "INFORMACION CONTRATO","ROLES","CENTROS"]
          this.isAdmin = true
          this.isInstructor = false
        }
@@ -438,7 +438,7 @@ export default {
           if(this.paquete.roles[0] == 'Administrator')
           {
               this.paquete.programas = []
-              if(this.paquete.sede != null)
+              if(this.paquete.centro != null)
                {
                  procesar = true
                }
@@ -455,7 +455,7 @@ export default {
             console.log(found)
             if (found != undefined)
               {
-                this.paquete.sede = null
+                this.paquete.centro = null
                 if (this.paquete.programas.length == 0)  
                  {
                    this.mensaje = "Debe seleccionar uno o mas programas"
@@ -465,12 +465,12 @@ export default {
                  }
                 else
                  {
-                  this.paquete.sede =  this.$store.getters.usuario.sede
+                  this.paquete.centro =  this.$store.getters.usuario.centro
                   procesar = true
                  }
               }
             else{
-              this.paquete.sede =  this.$store.getters.usuario.sede
+              this.paquete.centro =  this.$store.getters.usuario.centro
               this.paquete.programas = []
               procesar = true
             }
@@ -526,8 +526,8 @@ export default {
        this.roles = resultado.data
        const programas = await axios.get(`${this.api}/programas/`);
        this.programas = programas.data
-       const response = await axios.get(`${this.api}/sedes/`);
-       this.sedes = response.data  
+       const response = await axios.get(`${this.api}/centro/`);
+       this.centros = response.data  
    },
 
   

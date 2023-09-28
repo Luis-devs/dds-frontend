@@ -1,13 +1,22 @@
 <template>
   <v-navigation-drawer v-model="drawer" 
   color="white"
-  app class="fon" width="320px">
+  app
+  class="fon" 
+  width="320px">
+
     <vuescroll :ops="ops">
-      <LogoSVG height="100px" width="100px" />
-      <div style="text-align: center">
+      <router-link
+      to="/dashboard/welcome"
+      >
+      <div style="text-align: center" >
         <label class="letra" for="">EVENTOS SENA</label>
-        
       </div>
+   
+      <div style="text-align: center">
+        <label class="letra2" for="">{{centro.nombre}}</label>
+      </div>
+    </router-link>
       <div class="centrar">
       
         <img
@@ -15,11 +24,8 @@
           alt="Evento"
           width="100px"
         >
-      
       </div>
-      <v-divider> </v-divider>
-
-      <div class="app-sidebar-content">
+       <div class="app-sidebar-content">
         <sidebar-menu  showOneChild :menu="menu"/>
       </div>
     </vuescroll>
@@ -31,17 +37,20 @@ const menut = require("../../json/menu");
 
 import { SidebarMenu } from "vue-sidebar-menu";
 import vuescroll from "vuescroll";
-import LogoSVG from "@/assets/logos/DisenoAnimado.svg";
+import axios from 'axios';
+//import LogoSVG from "@/assets/logos/DisenoAnimado.svg";
 
 export default {
   components: {
     SidebarMenu,
     vuescroll,
-    LogoSVG,
+   // LogoSVG,
   },
 
   props: ["drawer"],
   data: () => ({
+    centro : null,
+    api : `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
     ops: {
       scrollPanel: {
         initialScrollY: false,
@@ -83,156 +92,15 @@ export default {
     ],
 
     menu : [],
-   /* menu: [
-      {
-        header: true,
-        title: "MENU EVENTOS",
-        hiddenOnCollapse: false,
-      },
-      {
-        href: "/dashboard/regional",
-        title: "Regional",
-        icon: "fa fa-building",
-      },
-      {
-        href: "/dashboard/centro",
-        title: "Centro",
-        icon: "mdi mdi-bank",
-      },
-      {
-        href: "/dashboard/sede",
-        title: "Sede",
-        icon: "mdi mdi-home-variant",
-      },
-      {
-        title: "Infra-estructura",
-        icon: "fa fa-cogs",
 
-        child: [
-          {
-            title: "Bloque",
-            child: [
-              {
-                href: "/dashboard/bloque",
-                title: "Crear",
-              },
-              {
-                href: "/dashboard/listarbloque",
-                title: "Listar",
-              },
-            ],
-          },
-          {
-            href: "/dashboard/tipoAmbiente",
-            title: "Tipo Ambiente",
-          },
-          {
-            title: "Ambiente",
-            child: [
-              {
-                href: "/dashboard/ambiente",
-                title: "Crear",
-              },
-              {
-                href: "/dashboard/listarambiente",
-                title: "Listar",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        title: "Programa",
-        icon: "fa fa-life-ring",
-
-        child: [
-          {
-            href: "/dashboard/crearprograma",
-            title: "Crear",
-          },
-          {
-            href: "/dashboard/listarprograma",
-            title: "Listar",
-          },
-
-          {
-            title: " * Ficha",
-
-            child: [
-              {
-                href: "/dashboard/crearficha",
-                title: "Crear Ficha",
-              },
-              {
-                href: "/dashboard/listarfichas",
-                title: "Listar",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        title: "Competencia",
-        icon: "mdi mdi-home-variant",
-
-        child: [
-          {
-            href: "/dashboard/crearcompetencia",
-            title: "Crear",
-          },
-          {
-            href: "/dashboard/listarcompetencia",
-            title: "Listar",
-          },
-          {
-            href: "/dashboard/crearresultadoaprendizaje",
-            title: "Resultados de Aprendizaje",
-          },
-          {
-            href: "/dashboard/carguemasivocompetencias",
-            title: "Cargue Masivo",
-          }
-        ],
-      },
-      {
-        title: "Instructor",
-        icon: "fa fa-user-secret ",
-
-        child: [
-          {
-            href: "/dashboard/crearinstructor",
-            title: "Crear",
-          },
-          {
-            href: "/dashboard/listarcompetencia",
-            title: "Listar",
-          },
-          {
-            href: "/dashboard/crearresultadoaprendizaje",
-            title: "Resultados de Aprendizaje",
-          },
-        ],
-      },
-      {
-        href: "/dashboard/crearevento",
-        title: "Evento",
-        icon: "mdi mdi-calendar-clock",
-      },
-      {
-        href: "/dashboard/disponibilidad",
-        title: "Disponibilidad",
-        icon: "mdi mdi-calendar-clock",
-      },
-      {
-        href: "/dashboard/estadistica",
-        title: "Estadisticas",
-        icon: "mdi mdi-chart-histogram",
-      },
-    ],*/
   }),
-  mounted() {
+ async  mounted() {
     let rol = this.$store.getters.usuario.roles
-    console.log(`Roles ${JSON.stringify(rol)}`)
+    let centro = this.$store.getters.usuario.centro
+    const response = await axios.get(`${this.api}/centro/${centro}`);
+    console.log(`centro ${response}`)
+    this.centro = response.data
+  
     const found = rol.find((element) => element == 'Administrator');
     if (found != undefined)
       {
@@ -245,7 +113,13 @@ export default {
          this.menu = menut[1].instructor
     }
 
-    }
+    },
+
+    methods: {
+      inicio(){
+        this.$router.push('/dashboard/welcome');
+      }
+    },
    
   
 };
@@ -257,7 +131,7 @@ export default {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-attachment: fixed;*/
-  background-color:white;
+  background-color:rgb(194, 240, 155);
   color:black;
   width: 100%;
   height: 100%;
@@ -268,6 +142,15 @@ export default {
   font-size: 40px;
   font-family:'Courier New', Courier, monospace;
   font-weight: 400;
+  text-shadow: 2px 2px 3px rgb(88, 214, 74);
+}
+
+.letra2 {
+  color: black;
+  font-size: 20px;
+  font-family:'Courier New', Courier, monospace;
+  font-weight: 400;
+  text-shadow: 2px 2px 3px rgb(88, 214, 74);
 }
 
 .centrar{

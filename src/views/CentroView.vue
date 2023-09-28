@@ -33,8 +33,28 @@
               </v-row>
 
               <v-row>
-                <v-col cols="6">
+                <v-col>
                   <v-select
+                    :items="regionales"
+                    item-text="nombre"
+                    item-value="_id"
+                    label="Seleccione regional"
+                    prepend-icon="map"
+                    v-model="paquete.regional"
+                    :rules="camposRules"
+                    @change="carga()"
+                  ></v-select>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col cols="6">
+                  <v-text-field
+                    prepend-icon="mdi-key"
+                    v-model="paquete.departamento"
+                    readonly
+                  ></v-text-field>
+                 <!-- <v-select
                     :items="departamentos"
                     item-text="departamento"
                     item-value="departamento"
@@ -43,6 +63,7 @@
                     :rules="camposRules"
                     prepend-icon="map"
                   ></v-select>
+                 -->
                 </v-col>
                 <v-col cols="6">
                   <v-select
@@ -56,19 +77,7 @@
                   ></v-select>
                 </v-col>
               </v-row>
-              <v-row>
-                <v-col>
-                  <v-select
-                    :items="regionales"
-                    item-text="nombre"
-                    item-value="_id"
-                    label="Seleccione regional"
-                    prepend-icon="map"
-                    v-model="paquete.regional"
-                    :rules="camposRules"
-                  ></v-select>
-                </v-col>
-              </v-row>
+            
             </v-container>
           </v-form>
         </v-card-text>
@@ -103,6 +112,7 @@ export default {
   },
   data() {
     return {
+      api : `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
       paquete: {
         codigo: null,
         nombre: null,
@@ -117,10 +127,14 @@ export default {
   },
 
   methods: {
+    async carga(){
+      const regional  = await axios.get(`${this.api}/regional/${this.paquete.regional}`);
+      this.paquete.departamento = regional.data.departamento
+    },
     async guardar() {
-      let url = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
+      
       await axios
-        .post(`${url}/centro/crear`, this.paquete)
+        .post(`${this.api}/centro/crear`, this.paquete)
         .then(function (response) {
           console.log(response);
         })

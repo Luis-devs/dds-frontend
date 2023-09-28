@@ -8,9 +8,19 @@ let menu = [
          
         },
           {
-            href: "/dashboard/regional",
+            
             title: "Regional",
             icon: "fa fa-building",
+            child: [
+              {
+                href: "/dashboard/regional",
+                title: "Crear",
+              },
+              {
+                href: "/dashboard/listarregional",
+                title: "Listar",
+              },
+            ],
           },
           {
             href: "/dashboard/centro",
@@ -112,25 +122,7 @@ let menu = [
               }
             ],
           },
-          {
-            title: "Instructor",
-            icon: "fa fa-user-secret ",
-      
-            child: [
-              {
-                href: "/dashboard/crearinstructor",
-                title: "Crear",
-              },
-              {
-                href: "/dashboard/listarcompetencia",
-                title: "Listar",
-              },
-              {
-                href: "/dashboard/crearresultadoaprendizaje",
-                title: "Resultados de Aprendizaje",
-              },
-            ],
-          },
+         
           {
             title: "Usuario",
             icon: "fa fa-user-secret ",
@@ -168,6 +160,11 @@ let menu = [
         {
           href: "/dashboard/estadistica",
           title: "Estadisticas",
+          icon: "mdi mdi-chart-histogram",
+        },
+        {
+          href: "/dashboard/salida",
+          title: "Salir",
           icon: "mdi mdi-chart-histogram",
         },
 

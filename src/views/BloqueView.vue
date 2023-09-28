@@ -68,12 +68,10 @@
 import axios from "axios";
 
 export default {
-  props: {
-    datos: Object,
-    mostrar: Boolean,
-  },
+  
   data() {
     return {
+      api : `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
       sedes : null,
       paquete: {
         nombre: null,
@@ -86,9 +84,8 @@ export default {
 
   methods: {
     async guardar() {
-      let url = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
       await axios
-        .post(`${url}/bloque/crear`, this.paquete)
+        .post(`${this.api}/bloque/crear`, this.paquete)
         .then(function (response) {
           console.log(response);
         })
@@ -102,8 +99,9 @@ export default {
     },
   },
   async mounted() {
-    const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
-    const response = await axios.get(`${api}/sedes/`);
+   
+    let centro = this.$store.getters.usuario.centro
+   const response = await axios.get(`${this.api}/sedes/centro/${centro}`);
     this.sedes = response.data
   },
 

@@ -20,24 +20,13 @@
           <v-form>
             <v-container>
               <v-row>
-                <v-col cols="6">
+                <v-col cols="12">
                   <v-text-field
                     label="Nombre de la sede"
                     v-model="paquete.nombre"
                     :rules="camposRules"
                   >
                   </v-text-field>
-                </v-col>
-                <v-col cols="6">
-                  <v-select
-                    label="Centro"
-                    prepend-icon="map"
-                    :items="centros"
-                    item-text="nombre"
-                    v-model="paquete.centro"
-                    :rules="camposRules"
-                    item-value="_id"
-                  ></v-select>
                 </v-col>
               </v-row>
               <v-row>
@@ -52,15 +41,12 @@
               </v-row>
               <v-row>
                 <v-col cols="6">
-                  <v-select
-                    :items="departamentos"
-                    item-text="departamento"
-                    item-value="departamento"
-                    label="Seleccione departamento"
-                    prepend-icon="map"
-                    v-model="paquete.departamento"
-                    :rules="camposRules"
-                  ></v-select>
+                <v-text-field
+                 label="Lugar de funcionamiento"
+                 v-model="paquete.departamento"
+                 readonly
+               >
+               </v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-select
@@ -84,24 +70,27 @@
         </v-card-actions>
       </v-card>
     </v-row>
-    <pre>
+     >
+     <v-snackbar
+     v-model="mostrar"
+     :color="color"
+   >
+      {{ mensaje }}
 
-{{ $data }}
-
-</pre
-    >
+     
+   </v-snackbar>
   </v-container>
 </template>
 <script>
 import axios from "axios";
 const colombia = require("../json/ciudades");
+
 export default {
-  props: {
-    datos: Object,
-    mostrar: Boolean,
-  },
+
+ 
   data() {
     return {
+       api : `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
       centros: null, //Aquí se cargan todos los centros que están en la bd
       paquete: {
         nombre: null,
@@ -112,25 +101,46 @@ export default {
       },
       departamentos: colombia,
       camposRules: [(v) => !!v || "Campo es requerido"],
+      mensaje : null,
+      color : null,
+      mostrar : false,
+
     };
   },
 
   methods: {
     async guardar() {
-      let url = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
+      let vm = this
+      this.mostrar = false
       await axios
-        .post(`${url}/sedes/crear`, this.paquete)
+        .post(`${this.api}/sedes/crear`, this.paquete)
         .then(function (response) {
-          console.log(response);
+          console.log(response)
+          if (response.status == 201)
+           {
+            vm.mensaje = 'Sede creada con exito ...'
+            vm.mostrar = true
+            vm.limpiar()
+
+           }
         })
         .catch(function (error) {
           // handle error
-          console.log(error);
+          vm.mensaje = `Se ha producido un error : ${error}`
+          vm.mostrar = true
+          vm.color = "red"
         })
         .finally(function () {
-          // always executed
+        
         });
     },
+
+    limpiar(){
+    this.paquete.nombre = null,
+    this.paquete.lugar_funcionamiento = null
+    this.paquete.municipio = null
+
+  }
   },
 
   computed: {
@@ -146,12 +156,13 @@ export default {
   },
 
   async mounted() {
-    const api = `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`;
-    const response = await axios.get(`${api}/centro/`);
-
-    this.centros = response.data;
-    console.log(this.centros);
+    this.paquete.centro = this.$store.getters.usuario.centro
+    const response = await axios.get(`${this.api}/centro/${this.paquete.centro}`);
+    this.paquete.departamento = response.data.regional.departamento
+   
   },
+
+  
 };
 </script>
 <style>

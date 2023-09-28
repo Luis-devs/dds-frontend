@@ -117,7 +117,17 @@
                         v-model="paquete.instructor"
                         append-icon="mdi-account"
                         :rules="camposRules"
-                      ></v-select>
+                      >
+                    
+                      <template v-slot:item="{ item }">
+                        {{ item.nombre}}  {{item.apellido }}
+                      </template>
+
+                      <template slot="selection" slot-scope="data">
+                        {{ data.item.nombre }}  {{ data.item.apellido }}
+                      </template>
+                    
+                    </v-select>
                     </v-col>
                   </v-row>
                     <v-row>
@@ -291,7 +301,10 @@ export default {
    },
 
    async instrucsedeprograma(){
-    const instructoresResponse = await axios.get(`${this.api}/instructor/programa/${this.paquete.programa}/sede/${this.paquete.sede}`);
+
+    //const instructoresResponse = await axios.get(`${this.api}/instructor/programa/${this.paquete.programa}/sede/${this.paquete.sede}`);
+    let centro = this.$store.getters.usuario.centro
+    const instructoresResponse = await axios.get(`${this.api}/user/programa/centro/${this.paquete.programa}/${centro}`);
     console.log(instructoresResponse.data)
     this.instructores = instructoresResponse.data
 
@@ -436,8 +449,11 @@ export default {
     this.jornadas = response.data;
 
     // obtener los ambientes
-    const sedesResponse = await axios.get(`${this.api}/sedes/`);
-    this.sedes = sedesResponse.data;
+    this.paquete.centro = this.$store.getters.usuario.centro
+    const responsede = await axios.get(`${this.api}/sedes/centro/${this.paquete.centro}`);
+   
+    
+    this.sedes = responsede.data;
 
    
     // obtener los programas

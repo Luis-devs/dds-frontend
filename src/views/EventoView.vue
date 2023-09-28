@@ -19,7 +19,7 @@
         <v-card-text>
           <v-form>
             <v-container>
-              <v-row>
+              <v-row align="end" class="mb-n10" >
                 <v-col cols="4">
                   <spam>Mes: <spam>{{fechactual.mesNum}}</spam> {{fechactual.mes}}</spam>
                 </v-col>
@@ -27,15 +27,9 @@
                   <spam>Año: <spam>{{fechactual.year}}</spam></spam>
                 </v-col>
 
-                <v-col cols="4">
-                  <span
-                    >Instructor: <input type="text" readonly class="instructor"
-                  /></span>
-                </v-col>
-
-              </v-row>
+                </v-row>
               
-              <v-row align="end" class="row-height mb-n10" >
+              <v-row align="end" class="row-height mb-n10 mt-n5" >
                 <v-col cols="2">
                    <v-select class="pt-0 mt-0"
                     label="Ficha"
@@ -87,6 +81,7 @@
                     v-model="paquete.ambiente.id"
                     append-icon="book"
                     :rules="camposRules"
+                    @change="cargaambiente()"
                   >
                   <template v-slot:item="{ item }">
                     {{ item.bloque.nomenclatura }}-{{ item.codigo }}
@@ -279,11 +274,11 @@
       </template>
     </v-snackbar>
       
-   <!--
+   
       <pre>
         {{ $data }}
       </pre>
-    -->
+    
   </v-container>
 </template>
 <script>
@@ -396,9 +391,17 @@ export default {
   },
 
   methods: {
+    cargaambiente(){
+      let amb = this.ambientes.filter(e => e._id == this.paquete.ambiente.id)
+      this.paquete.ambiente.ambiente = amb[0].bloque.nomenclatura + '-' + amb[0].codigo
+
+    },
+
     async eliminareventobd(pos){
+      let usuario = this.$store.getters.usuario.id
+      let vm = this
       const paq = {
-          instructor : "64ff808815f852cb3ee45e4b",
+          instructor : usuario,
           evento : this.saveeventos[pos],
           eventIndex : pos
       }
@@ -406,8 +409,9 @@ export default {
         .post(`${this.api}/evento/eliminar/especifico`,paq)
         .then(function (response) {
              console.log(response)
-          
+              vm.bdeventos()
           })
+       
        
 
 
@@ -444,6 +448,7 @@ export default {
         .post(`${this.api}/evento/crear`, this.evento)
         .then(function () {
          wd.evento.eventos = []
+         wd.bdeventos();
           })
         .catch(function (error) {
           {
@@ -501,6 +506,10 @@ export default {
      this.paquete.municipio = res[0].sede.municipio
      this.paquete.ambiente.id = res[0].ambiente._id
 
+     const ambientesResponse = await axios.get(`${this.api}/ambiente/sede/${res[0].sede._id}`);
+     this.ambientes = ambientesResponse.data;
+
+      console.log(this.ambientes)
      let amb = this.ambientes.filter(e => e._id == this.paquete.ambiente.id)
        this.paquete.ambiente.ambiente = amb[0].bloque.nomenclatura + '-' + amb[0].codigo
 
@@ -669,7 +678,7 @@ export default {
   async mounted() {
   
     this.limpieza = JSON.parse(JSON.stringify(this.paquete))
-    let instructor = '64ff808815f852cb3ee45e4b'
+    let instructor = this.$store.getters.usuario.id
     const fecha = await axios.get(`${this.api}/date/`);
     this.fechactual = fecha.data;
     this.evento.mes = this.fechactual.mesNum
@@ -678,20 +687,23 @@ export default {
 
     this.bdeventos()
 
-    const inst = await axios.get(`${this.api}/instructor/${instructor}`);
-    this.instructor = inst.data
-    const ambientesResponse = await axios.get(`${this.api}/ambiente/sede/${this.instructor.sede}`);
-    this.ambientes = ambientesResponse.data;
-    console.log(this.ambientes)
-
-    for (let data of inst.data.programas)
+   // const inst = await axios.get(`${this.api}/instructor/${instructor}`);
+   // this.instructor = inst.data
+   
+   let programas = this.$store.getters.usuario.programas
+   let centro = this.$store.getters.usuario.centro
+   const sedes  = await axios.get(`${this.api}/sedes/centro/${centro}`);
+   console.log(sedes)
+    for (let data of programas)
      {
-      const fichas  = await axios.get(`${this.api}/ficha/programas/${data}`);
-      console.log(fichas)
-      for (let x of fichas.data)
+      for (let sed of sedes.data)
        {
-          this.fichas.push(x)
-       }
+          const fichas  = await axios.get(`${this.api}/ficha/programa/${data}/sede/${sed._id}`);
+          for (let x of fichas.data)
+           {
+            this.fichas.push(x)
+           }
+      }
      } 
  },
  watch: {

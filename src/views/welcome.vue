@@ -82,7 +82,8 @@
             :type="type"
             @click:more="viewDay"
             @click:date="viewDay"
-            color="primary"
+            color="yellow"
+            style="height: 600px; font-size: 12px;"
                ></v-calendar>
         </v-sheet>
       </v-col>
@@ -117,7 +118,9 @@ export default {
     this.mes = fechactual.mesNum
     this.year = fechactual.year
     this.today =  `${this.year}-${this.mes}-12`
-    const inst = await axios.get(`${this.api}/evento/especificos/${this.mes}/${this.year}/instructor/64ff808815f852cb3ee45e4b`);
+    let usuario = this.$store.getters.usuario.id
+    console.log(usuario)
+    const inst = await axios.get(`${this.api}/evento/especificos/${this.mes}/${this.year}/instructor/${usuario}`);
     this.eventos = inst.data[0].eventos
     for (let even of this.eventos){
        let horario = even.horario.split('-')
@@ -162,7 +165,9 @@ export default {
 .vcal-event-name {
   white-space: normal; /* Allow text to wrap within the event name */
   overflow-wrap: break-word;
+  
 }
+
 
 .row {
   align-items: center;
